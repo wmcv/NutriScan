@@ -7,7 +7,7 @@ export const analyzeProduct = async (
 
 
   ) => {
-    const res = await fetch("http://localhost:5001/analyze_product", {
+    const res = await fetch("http://132.145.98.33:8080/analyze_product", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

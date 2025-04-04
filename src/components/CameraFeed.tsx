@@ -7,7 +7,7 @@ interface CamProps {
   updateBarcode: (newBarcode: string) => void;
 }
 
-const socket = io("http://127.0.0.1:5001", {
+const socket = io("http://132.145.98.33:8080", {
   transports: ["websocket", "polling"],
   withCredentials: true,
   reconnection: true,
