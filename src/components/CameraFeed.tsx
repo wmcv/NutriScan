@@ -7,8 +7,8 @@ interface CamProps {
   updateBarcode: (newBarcode: string) => void;
 }
 
-const socket = io("http://132.145.98.33:8080", {
-  transports: ["websocket", "polling"],
+const socket = io("wss://132.145.98.33:8080", {
+  transports: ["websocket"],
   withCredentials: true,
   reconnection: true,
   reconnectionAttempts: 5,
@@ -29,54 +29,43 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
       const videoDevices = devices.filter(
         (device) => device.kind === "videoinput"
       );
-      console.log("Available video devices:", videoDevices); // Log devices to check
       setCameras(videoDevices);
-
-      // If only one camera is available, disable the flip button
-      if (videoDevices.length <= 1) {
-        console.log("Only one camera detected, flipping not possible.");
-      }
+      console.log("📷 Video Devices:", videoDevices);
     });
 
     socket.on("product_info", (data) => {
-      console.log("🟢 Product detected:", data);
+      console.log("Product detected:", data);
       updateBarcode(data);
       isStreamingRef.current = false;
       setIsPaused(true);
     });
 
     socket.on("stop_stream", () => {
-      console.log("streaming paused by backend");
+      console.log("Stream stopped by backend");
       isStreamingRef.current = false;
       setIsPaused(true);
     });
 
     socket.on("connect_error", (err) => {
-      console.error("webSocket Connection Error:", err);
+      console.error("WebSocket error:", err);
     });
 
     return () => {
-      socket.off("product_info");
-      socket.off("stop_stream");
-      socket.off("connect_error");
+      socket.disconnect();
     };
   }, []);
 
   const startStreaming = () => {
-    console.log("Starting Stream...");
     setIsStreaming(true);
     setIsPaused(false);
     isStreamingRef.current = true;
-
     startCamera(cameras[currentCameraIndex]?.deviceId);
   };
 
   const stopStreaming = () => {
-    console.log("Stopping Stream...");
     setIsStreaming(false);
     setIsPaused(false);
     isStreamingRef.current = false;
-
     socket.emit("stop_stream");
 
     if (videoRef.current?.srcObject) {
@@ -93,12 +82,17 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
 
   const startCamera = async (deviceId?: string) => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: deviceId ? { deviceId: { exact: deviceId } } : true,
-      });
+      const constraints: MediaStreamConstraints = {
+        video: deviceId
+          ? { deviceId: { exact: deviceId } }
+          : { facingMode: "environment" },
+        audio: false,
+      };
 
-      if (videoRef.current) videoRef.current.srcObject = stream;
-      console.log("Camera started!");
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
 
       if (!frameInterval.current) {
         frameInterval.current = window.setInterval(() => {
@@ -106,12 +100,26 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
         }, 500);
       }
     } catch (err) {
-      console.error("error accessing camera: ", err);
+      console.error("Camera access error:", err);
     }
   };
-  //?
+
+  const captureFrame = () => {
+    if (!videoRef.current || isPaused) return;
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+    ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+    const dataUrl = canvas.toDataURL("image/jpeg");
+    socket.emit("send_items", { frame: dataUrl });
+  };
+
   const scanAgain = () => {
-    console.log("resuming scanning...");
     setIsPaused(false);
     isStreamingRef.current = true;
   };
@@ -120,25 +128,11 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
     if (cameras.length > 1) {
       const newIndex = (currentCameraIndex + 1) % cameras.length;
       setCurrentCameraIndex(newIndex);
-      startCamera(cameras[newIndex].deviceId);
+      stopStreaming(); // stop the current camera
+      setTimeout(() => startStreaming(), 300); // start new one after small delay
     } else {
-      console.log("Only one camera available, flipping not possible.");
+      console.log("⚠️ Only one camera available");
     }
-  };
-
-  const captureFrame = () => {
-    if (!videoRef.current || isPaused) return;
-
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-    if (!context) return;
-
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
-    context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-    const dataUrl = canvas.toDataURL("image/jpeg");
-
-    socket.emit("send_items", { frame: dataUrl });
   };
 
   return (
@@ -158,7 +152,8 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
             ref={videoRef}
             autoPlay
             playsInline
-            style={{ width: "100%", height: "100%" }}
+            muted
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         ) : (
           <Text color="gray.500" fontSize="lg">
