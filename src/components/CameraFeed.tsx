@@ -6,8 +6,8 @@ import { io } from "socket.io-client";
 interface CamProps {
   updateBarcode: (newBarcode: string) => void;
 }
-//
-const socket = io("wss://132.145.98.33:8080", {
+
+const socket = io("http://132.145.98.33:8080", {
   transports: ["websocket", "polling"],
   withCredentials: true,
   reconnection: true,
@@ -29,9 +29,10 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
       const videoDevices = devices.filter(
         (device) => device.kind === "videoinput"
       );
-      console.log("Available video devices:", videoDevices);
+      console.log("Available video devices:", videoDevices); // Log devices to check
       setCameras(videoDevices);
 
+      // If only one camera is available, disable the flip button
       if (videoDevices.length <= 1) {
         console.log("Only one camera detected, flipping not possible.");
       }
