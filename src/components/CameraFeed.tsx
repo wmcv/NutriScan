@@ -7,7 +7,7 @@ interface CamProps {
   updateBarcode: (newBarcode: string) => void;
 }
 
-const socket = io("wss://132.145.98.33:8080", {
+const socket = io("https://boulevard-r-silly-knit.trycloudflare.com", {
   transports: ["websocket"],
   withCredentials: true,
   reconnection: true,
