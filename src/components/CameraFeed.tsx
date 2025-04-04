@@ -7,7 +7,7 @@ interface CamProps {
   updateBarcode: (newBarcode: string) => void;
 }
 
-const socket = io("http://132.145.98.33:8080", {
+const socket = io("wss://132.145.98.33:8080", {
   transports: ["websocket", "polling"],
   withCredentials: true,
   reconnection: true,
@@ -17,7 +17,7 @@ const socket = io("http://132.145.98.33:8080", {
 
 const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
   const [isStreaming, setIsStreaming] = useState(false);
-  const [isPaused, setIsPaused] = useState(false); // Paused after detection
+  const [isPaused, setIsPaused] = useState(false);
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
   const [currentCameraIndex, setCurrentCameraIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -29,10 +29,9 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
       const videoDevices = devices.filter(
         (device) => device.kind === "videoinput"
       );
-      console.log("Available video devices:", videoDevices); // Log devices to check
+      console.log("Available video devices:", videoDevices);
       setCameras(videoDevices);
 
-      // If only one camera is available, disable the flip button
       if (videoDevices.length <= 1) {
         console.log("Only one camera detected, flipping not possible.");
       }
