@@ -26,7 +26,16 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
 
   useEffect(() => {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
-      setCameras(devices.filter((device) => device.kind === "videoinput"));
+      const videoDevices = devices.filter(
+        (device) => device.kind === "videoinput"
+      );
+      console.log("Available video devices:", videoDevices); // Log devices to check
+      setCameras(videoDevices);
+
+      // If only one camera is available, disable the flip button
+      if (videoDevices.length <= 1) {
+        console.log("Only one camera detected, flipping not possible.");
+      }
     });
 
     socket.on("product_info", (data) => {
@@ -112,6 +121,8 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
       const newIndex = (currentCameraIndex + 1) % cameras.length;
       setCurrentCameraIndex(newIndex);
       startCamera(cameras[newIndex].deviceId);
+    } else {
+      console.log("Only one camera available, flipping not possible.");
     }
   };
 

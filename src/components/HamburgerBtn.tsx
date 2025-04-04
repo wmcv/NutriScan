@@ -1,6 +1,6 @@
 import { IconButton, Flex } from "@chakra-ui/react";
 import { useState } from "react";
-import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import { HamburgerIcon } from "@chakra-ui/icons";
 
 interface HamburgerBtnProps {
   toggleMenu: (isOpen: boolean) => void;
