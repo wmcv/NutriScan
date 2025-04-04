@@ -109,7 +109,7 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
       console.error("error accessing camera: ", err);
     }
   };
-
+  //?
   const scanAgain = () => {
     console.log("resuming scanning...");
     setIsPaused(false);
