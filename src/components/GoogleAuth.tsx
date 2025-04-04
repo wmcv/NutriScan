@@ -1,7 +1,15 @@
+// src/components/GoogleAuth.tsx
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { Avatar, IconButton } from "@chakra-ui/react";
 import { FaUserCircle } from "react-icons/fa";
+
+export const isUserSignedIn = async (): Promise<boolean> => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return !!user;
+};
 
 const GoogleAuth = () => {
   const [user, setUser] = useState<any>(null);

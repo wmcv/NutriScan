@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Box, Button, IconButton, HStack, Text } from "@chakra-ui/react";
 import { FaPlay, FaStop, FaSyncAlt } from "react-icons/fa";
 import { io } from "socket.io-client";
+import { supabase } from "../supabaseClient";
 
 interface CamProps {
   updateBarcode: (newBarcode: string) => void;
@@ -23,8 +24,32 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const frameInterval = useRef<number | null>(null);
   const isStreamingRef = useRef(false);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+  }, []);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error("Error getting user:", error.message);
+      } else {
+        setUser(data.user);
+      }
+    };
+    getUser();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === "SIGNED_IN") setUser(session?.user ?? null);
+        if (event === "SIGNED_OUT") setUser(null);
+      }
+    );
+
     navigator.mediaDevices.enumerateDevices().then((devices) => {
       const videoDevices = devices.filter(
         (device) => device.kind === "videoinput"
@@ -34,28 +59,35 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
     });
 
     socket.on("product_info", (data) => {
-      console.log("Product detected:", data);
+      console.log("📦 Product detected:", data);
       updateBarcode(data);
       isStreamingRef.current = false;
       setIsPaused(true);
     });
 
     socket.on("stop_stream", () => {
-      console.log("Stream stopped by backend");
+      console.log("⛔ Stream stopped by backend");
       isStreamingRef.current = false;
       setIsPaused(true);
     });
 
     socket.on("connect_error", (err) => {
-      console.error("WebSocket error:", err);
+      console.error("❌ WebSocket error:", err);
     });
 
     return () => {
       socket.disconnect();
+      authListener?.subscription?.unsubscribe?.();
     };
   }, []);
 
-  const startStreaming = () => {
+  const startStreaming = async () => {
+    if (!user) {
+      console.log("User not logged in, triggering login...");
+      await supabase.auth.signInWithOAuth({ provider: "google" });
+      return;
+    }
+
     setIsStreaming(true);
     setIsPaused(false);
     isStreamingRef.current = true;
