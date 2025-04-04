@@ -1,12 +1,5 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Flex,
-  HStack,
-  IconButton,
-  Text,
-  Divider,
-} from "@chakra-ui/react";
+import { Box, Flex, HStack, IconButton, Text, Divider } from "@chakra-ui/react";
 import TableSelectionBtn from "./TableSelectionBtn";
 import { useState, useEffect } from "react";
 import DietOptionsTable from "./DietOptionsTable";
@@ -211,7 +204,7 @@ const MenuFrame: React.FC<NavBarProps> = ({ setMenuOpen }) => {
             setTrue={setB}
             setFalse1={setA}
             setFalse2={setC}
-            label="Custom"
+            label="Restrict"
           />
           <TableSelectionBtn
             setTrue={setC}
