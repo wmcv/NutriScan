@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 interface CamProps {
   updateBarcode: (newBarcode: string) => void;
 }
-
+//
 const socket = io("wss://132.145.98.33:8080", {
   transports: ["websocket", "polling"],
   withCredentials: true,
