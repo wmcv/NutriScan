@@ -19,7 +19,11 @@ const TableSelectionBtn: React.FC<SimpleToggleProps> = ({
     setFalse2(false);
   };
 
-  return <Button onClick={handleClick}>{label}</Button>;
+  return (
+    <Button onClick={handleClick} fontFamily="Trebuchet MS">
+      {label}
+    </Button>
+  );
 };
 
 export default TableSelectionBtn;

@@ -33,9 +33,9 @@ const DietLimitTable: React.FC<NutrientLimitsTableProps> = ({
   const getUnit = (nutrient: string) => {
     const unitMap: { [key: string]: string } = {
       Calories: "kcal",
-      "Total Fat": "g",
-      "Saturated Fat": "g",
-      "Trans Fat": "g",
+      TotalFat: "g",
+      SaturatedFat: "g",
+      TransFat: "g",
       Cholesterol: "mg",
       Carbohydrates: "g",
       Sugars: "g",
@@ -51,7 +51,7 @@ const DietLimitTable: React.FC<NutrientLimitsTableProps> = ({
 
   return (
     <Box overflowX="auto">
-      <Table variant="simple" size="sm">
+      <Table variant="simple" size="sm" fontFamily="Lucida Console">
         <Thead>
           <Tr>
             <Th w="120px">Nutrient</Th>

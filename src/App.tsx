@@ -14,6 +14,7 @@ function App() {
   const [barcode, setBarcode] = useState("empty");
   const [AIMessage, setAIMessage] = useState("empty");
   const [productName, setProductName] = useState("Product");
+  const [servingSize, setServingSize] = useState("perApple");
   const [productIngredients, setProductIngredients] = useState("Ingredients");
   const [productNutrients, setproductNutrients] = useState<{
     energy_kcal: number;
@@ -36,10 +37,11 @@ function App() {
       if (barcode && barcode !== "empty") {
         const product = await fetchProduct(barcode);
         const product_name = product.product_name;
-        setProductName(product_name || "Name");
-        const ingredients =
-          product.ingredients_text || "No ingredients available";
+        setProductName(product_name || "NaN");
+        const ingredients = product.ingredients_text || "NaN";
         setProductIngredients(ingredients);
+        const servingsize = product.serving_size || "NaN";
+        setServingSize(servingsize);
         const nutriments = product.nutriments || {};
         const nutrients = {
           energy_kcal: nutriments["energy-kcal"] || 0,
@@ -59,7 +61,7 @@ function App() {
         setproductNutrients(nutrients);
 
         const preferences = await getUserPreferences();
-        console.log(preferences);
+        //console.log(preferences);
         if (preferences) {
           const aiMsg = await analyzeProduct(
             product_name,
@@ -77,36 +79,26 @@ function App() {
 
   return (
     <Grid templateAreas={`"nav" "cam" "divider1" "AI" "divider2" "info"`}>
-      {/* Navigation Bar */}
       <GridItem area="nav">
         <NavBar toggleSettings={setSettingsOpen} settingsOpen={settingsOpen} />
         {settingsOpen && <MenuFrame setMenuOpen={setSettingsOpen} />}
       </GridItem>
-
-      {/* Camera Feed */}
       <GridItem area="cam">
         <CameraFeed updateBarcode={setBarcode} />
       </GridItem>
-
-      {/* Divider between Camera and AI Info */}
       <GridItem area="divider1">
         <Divider borderColor="gray.300" my={2} />
       </GridItem>
-
-      {/* AI Info */}
       <GridItem area="AI">
         <AIInfo aiResponse={AIMessage} />
       </GridItem>
-
-      {/* Divider between AI Info and Product Info */}
       <GridItem area="divider2">
         <Divider borderColor="gray.300" my={2} />
       </GridItem>
-
-      {/* Product Info */}
       <GridItem area="info">
         <ProductInfo
           productName={productName}
+          servingSize={servingSize}
           productIngredients={productIngredients}
           productNutrients={productNutrients || {}}
         />

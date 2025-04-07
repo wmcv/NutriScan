@@ -23,7 +23,7 @@ const DietOptionsTable: React.FC<SelectableTableProps> = ({
 }) => {
   return (
     <RadioGroup value={selected?.name || ""}>
-      <Table variant="simple">
+      <Table variant="simple" fontFamily="Lucida Console">
         <Thead>
           <Tr>
             <Th>Select</Th>

@@ -55,24 +55,24 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
         (device) => device.kind === "videoinput"
       );
       setCameras(videoDevices);
-      console.log("📷 Video Devices:", videoDevices);
+      console.log("Video Devices:", videoDevices);
     });
 
     socket.on("product_info", (data) => {
-      console.log("📦 Product detected:", data);
+      console.log("Product detected:", data);
       updateBarcode(data);
       isStreamingRef.current = false;
       setIsPaused(true);
     });
 
     socket.on("stop_stream", () => {
-      console.log("⛔ Stream stopped by backend");
+      console.log("Stream stopped by backend");
       isStreamingRef.current = false;
       setIsPaused(true);
     });
 
     socket.on("connect_error", (err) => {
-      console.error("❌ WebSocket error:", err);
+      console.error("WebSocket error:", err);
     });
 
     return () => {
@@ -83,7 +83,7 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
 
   const startStreaming = async () => {
     if (!user) {
-      console.log("User not logged in, triggering login...");
+      console.log("User not logged in, triggering login");
       await supabase.auth.signInWithOAuth({ provider: "google" });
       return;
     }
@@ -160,10 +160,10 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
     if (cameras.length > 1) {
       const newIndex = (currentCameraIndex + 1) % cameras.length;
       setCurrentCameraIndex(newIndex);
-      stopStreaming(); // stop the current camera
-      setTimeout(() => startStreaming(), 300); // start new one after small delay
+      stopStreaming();
+      setTimeout(() => startStreaming(), 300);
     } else {
-      console.log("⚠️ Only one camera available");
+      console.log("Only one camera available");
     }
   };
 
@@ -188,27 +188,28 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         ) : (
-          <Text color="gray.500" fontSize="lg">
-            Camera Preview
+          <Text fontFamily="Vagabondfed" color="gray.500" fontSize="lg">
+            Scan Food Barcodes
           </Text>
         )}
       </Box>
 
       <HStack mt={2} spacing={2}>
         <Button
-          colorScheme={isStreaming ? "red" : "green"}
+          colorScheme={isStreaming ? "coralRedCustom" : "emeraldGreenCustom"}
           onClick={
             isPaused ? scanAgain : isStreaming ? stopStreaming : startStreaming
           }
           leftIcon={
             isPaused ? <FaPlay /> : isStreaming ? <FaStop /> : <FaPlay />
           }
+          fontFamily="Vagabondfed"
         >
           {isPaused
             ? "Scan Again"
             : isStreaming
-            ? "Stop Streaming"
-            : "Start Streaming"}
+            ? "Stop Scanning"
+            : "Start Scanning"}
         </Button>
 
         {cameras.length > 1 && (
@@ -216,7 +217,7 @@ const CameraFeed: React.FC<CamProps> = ({ updateBarcode }) => {
             aria-label="Flip Camera"
             icon={<FaSyncAlt />}
             onClick={flipCamera}
-            colorScheme="blue"
+            colorScheme="sapphireBlueCustom"
           />
         )}
       </HStack>

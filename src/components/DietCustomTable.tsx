@@ -31,7 +31,7 @@ const DietCustomTable: React.FC<Props> = ({ ingredients, setIngredients }) => {
   };
 
   return (
-    <Table variant="simple">
+    <Table variant="simple" fontFamily="Lucida Console">
       <Thead>
         <Tr>
           <Th>Ingredient</Th>

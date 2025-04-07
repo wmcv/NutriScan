@@ -9,10 +9,12 @@ import {
   Td,
   Tag,
   Wrap,
+  Flex,
 } from "@chakra-ui/react";
 
 interface ProductInfoProps {
   productName: string;
+  servingSize: string;
   productIngredients: string;
   productNutrients: Record<string, any>;
 }
@@ -35,6 +37,7 @@ const nutrientUnits: Record<string, string> = {
 
 const ProductInfo: React.FC<ProductInfoProps> = ({
   productName,
+  servingSize,
   productIngredients,
   productNutrients,
 }) => {
@@ -42,12 +45,31 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
 
   return (
     <Box p={6} bg="white" borderRadius="md" boxShadow="md">
-      <Text fontSize="2xl" fontWeight="bold" mb={4}>
+      <Text
+        fontFamily="Tahoma"
+        fontSize="2xl"
+        fontWeight="bold"
+        mb={4}
+        lineHeight="1.2"
+      >
         {productName}
       </Text>
-
-      <Text fontWeight="semibold" fontSize="lg" mb={2}>
+      <Text
+        fontFamily="Tahoma"
+        fontWeight="semibold"
+        fontSize="lg"
+        lineHeight="1.2"
+      >
         Nutrient Facts
+      </Text>
+      <Text
+        fontFamily="Lucida Console"
+        fontSize="xs"
+        mb={2}
+        mt={0}
+        lineHeight="1.2"
+      >
+        {servingSize}
       </Text>
       <Table size="sm" variant="striped" colorScheme="gray">
         <Thead>
@@ -80,12 +102,23 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         </Tbody>
       </Table>
 
-      <Text fontWeight="semibold" fontSize="lg" mt={6} mb={2}>
+      <Text
+        fontFamily="Tahoma"
+        fontWeight="semibold"
+        fontSize="lg"
+        mt={6}
+        mb={2}
+      >
         Ingredients
       </Text>
       <Wrap>
         {productIngredients.split(", ").map((ingredient, index) => (
-          <Tag key={index} colorScheme="blue" size="md">
+          <Tag
+            key={index}
+            fontFamily="Lucida Console"
+            colorScheme="blue"
+            size="md"
+          >
             {ingredient}
           </Tag>
         ))}
