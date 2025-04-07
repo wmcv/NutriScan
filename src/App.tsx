@@ -37,7 +37,7 @@ function App() {
       if (barcode && barcode !== "empty") {
         const product = await fetchProduct(barcode);
         //const product_name = product.product_name;
-        const product_name = product.generic_name;
+        const product_name = product.abbreviated_product_name;
         setProductName(product_name || "NaN");
         const ingredients = product.ingredients_text || "NaN";
         setProductIngredients(ingredients);
