@@ -58,7 +58,7 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ aiResponse }) => {
       >
         Analysis
       </Text>
-      <Text>{explanation}</Text>
+      <Text fontFamily="Lucida Console">{explanation}</Text>
     </Box>
   );
 };

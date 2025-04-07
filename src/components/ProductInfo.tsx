@@ -63,7 +63,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
       </Text>
       <Text
         fontFamily="Lucida Console"
-        fontSize="xs"
+        fontSize="sm"
         mb={2}
         mt={0}
         lineHeight="1.2"
@@ -77,12 +77,12 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
             <Th isNumeric>Amount</Th>
           </Tr>
         </Thead>
-        <Tbody>
+        <Tbody fontFamily="Lucida Console">
           {Object.entries(productNutrients).map(([key, value]) => {
             const formattedKey = key
               .replace(/_/g, " ")
-              .replace(/\b\w/g, (char) => char.toUpperCase()); // Convert to Title Case
-            const unit = nutrientUnits[key] || ""; // Get unit or empty string if not found
+              .replace(/\b\w/g, (char) => char.toUpperCase());
+            const unit = nutrientUnits[key] || "";
 
             return (
               <Tr key={key}>
@@ -115,7 +115,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
           <Tag
             key={index}
             fontFamily="Lucida Console"
-            colorScheme="blue"
+            colorScheme="sapphireBlue"
             size="md"
           >
             {ingredient}
