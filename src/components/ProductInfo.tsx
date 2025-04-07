@@ -23,15 +23,15 @@ const nutrientUnits: Record<string, string> = {
   fat: "g",
   saturated_fat: "g",
   trans_fat: "g",
-  cholesterol: "mg",
+  cholesterol: "g",
   carbohydrates: "g",
   sugars: "g",
   fiber: "g",
   proteins: "g",
   salt: "g",
-  sodium: "mg",
-  iron: "mg",
-  calcium: "mg",
+  sodium: "g",
+  iron: "g",
+  calcium: "g",
 };
 
 const ProductInfo: React.FC<ProductInfoProps> = ({
@@ -68,7 +68,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         mt={0}
         lineHeight="1.2"
       >
-        {servingSize}
+        Per {servingSize}
       </Text>
       <Table size="sm" variant="striped" colorScheme="gray">
         <Thead>

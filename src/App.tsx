@@ -14,7 +14,7 @@ function App() {
   const [barcode, setBarcode] = useState("empty");
   const [AIMessage, setAIMessage] = useState("empty");
   const [productName, setProductName] = useState("Product");
-  const [servingSize, setServingSize] = useState("perApple");
+  const [servingSize, setServingSize] = useState("Serving Size");
   const [productIngredients, setProductIngredients] = useState("Ingredients");
   const [productNutrients, setproductNutrients] = useState<{
     energy_kcal: number;
@@ -36,7 +36,8 @@ function App() {
     const getInfo = async () => {
       if (barcode && barcode !== "empty") {
         const product = await fetchProduct(barcode);
-        const product_name = product.product_name;
+        //const product_name = product.product_name;
+        const product_name = product.generic_name;
         setProductName(product_name || "NaN");
         const ingredients = product.ingredients_text || "NaN";
         setProductIngredients(ingredients);
