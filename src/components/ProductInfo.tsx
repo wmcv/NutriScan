@@ -9,7 +9,6 @@ import {
   Td,
   Tag,
   Wrap,
-  Flex,
 } from "@chakra-ui/react";
 
 interface ProductInfoProps {
