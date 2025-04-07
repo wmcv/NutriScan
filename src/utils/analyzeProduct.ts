@@ -2,6 +2,8 @@ export const analyzeProduct = async (
 
     productName: string,
     productIngredients: string,
+    ecoscoreGrade: string,
+    foodGroups: string,
     productNutrients: Record<string, any>,
     userPreferences: Record<string, any>
 
@@ -13,6 +15,8 @@ export const analyzeProduct = async (
       body: JSON.stringify({
         product_name: productName,
         product_ingredients :productIngredients,
+        ecoscore_grade : ecoscoreGrade,
+        food_groups : foodGroups,
         product_nutrients: productNutrients,
         user_preferences: userPreferences,
       }),

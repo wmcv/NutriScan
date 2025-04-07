@@ -16,6 +16,8 @@ function App() {
   const [productName, setProductName] = useState("Product");
   const [servingSize, setServingSize] = useState("Serving Size");
   const [productIngredients, setProductIngredients] = useState("Ingredients");
+  const [ecoscoreGrade, setEcoscoreGrade] = useState("NaN");
+  const [foodGroups, setFoodGroups] = useState("NaN");
   const [productNutrients, setproductNutrients] = useState<{
     energy_kcal: number;
     fat: number;
@@ -37,12 +39,19 @@ function App() {
       if (barcode && barcode !== "empty") {
         const product = await fetchProduct(barcode);
         //const product_name = product.product_name;
-        const product_name = product.abbreviated_product_name;
+        const product_name =
+          product.product_name_en || product.product_name || "NaN";
         setProductName(product_name || "NaN");
         const ingredients = product.ingredients_text || "NaN";
         setProductIngredients(ingredients);
         const servingsize = product.serving_size || "NaN";
         setServingSize(servingsize);
+
+        const ecoscoregrade = product.ecoscore_grade || "NaN";
+        setEcoscoreGrade(ecoscoregrade)
+        const foodgroups = product.food_groups || "NaN";
+        setFoodGroups(foodgroups)
+
         const nutriments = product.nutriments || {};
         const nutrients = {
           energy_kcal: nutriments["energy-kcal"] || 0,
@@ -67,6 +76,8 @@ function App() {
           const aiMsg = await analyzeProduct(
             product_name,
             ingredients,
+            ecoscoreGrade,
+            foodGroups,
             nutrients || {},
             preferences
           );

@@ -8,6 +8,8 @@ interface CamProps {
   updateBarcode: (newBarcode: string) => void;
 }
 
+// const socket = io("http://0.0.0.0:5001", {
+// const socket = io("https://boulevard-r-silly-knit.trycloudflare.com", {
 const socket = io("https://boulevard-r-silly-knit.trycloudflare.com", {
   transports: ["websocket"],
   withCredentials: true,
