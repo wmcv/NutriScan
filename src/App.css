@@ -18,25 +18,6 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-.popup-container {
-  position: fixed; 
-  top: 20px; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  z-index: 9999;
-  display: flex;
-  flex-direction: column; 
-  gap: 10px;
-}
-
-.TempPopup {
-  background-color: #ffcc00;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.3s ease-in-out;
-}
-
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -58,15 +39,4 @@
 
 .read-the-docs {
   color: #888;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

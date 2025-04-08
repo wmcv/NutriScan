@@ -13,6 +13,7 @@ import { supabase } from "./supabaseClient";
 import { Challenge } from "./types";
 import { analyzeChallenge } from "./utils/analyzeChallenge";
 import TempPopup from "./components/TempPopup";
+import "./popup.css";
 
 function App() {
   const [popups, setPopups] = useState<string[]>([]);
