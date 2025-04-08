@@ -124,6 +124,10 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
   ) {
 
     console.log('working 1')
+    console.log(challenge)
+    console.log(challengeKey)
+    console.log(challengeProgress)
+    console.log(challengeComplete)
     console.log(nutrients)
     console.log(nutrientName)
     console.log(challengeAmount)
