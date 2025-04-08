@@ -189,50 +189,6 @@ function App() {
         setGlutenFree(isGlutenFree);
         console.log(glutenFree);
 
-        const fetchUserData = async () => {
-          const {
-            data: { user },
-            error,
-          } = await supabase.auth.getUser();
-
-          if (user && !error) {
-            const userId = user.id;
-
-            const {
-              data: weeklyChallengesUsers,
-              error: weeklyChallengesError,
-            } = await supabase
-              .from("WeeklyChallengesUsers")
-              .select(
-                "challenge1, challenge2, challenge3, challenge4, challenge5, completed"
-              )
-              .eq("user_id", userId);
-
-            if (weeklyChallengesError) {
-              console.error(weeklyChallengesError);
-              return;
-            }
-
-            if (weeklyChallengesUsers?.length) {
-              const userChallengesTemp = [
-                weeklyChallengesUsers[0]["challenge1"],
-                weeklyChallengesUsers[0]["challenge2"],
-                weeklyChallengesUsers[0]["challenge3"],
-                weeklyChallengesUsers[0]["challenge4"],
-                weeklyChallengesUsers[0]["challenge5"],
-              ];
-              const completedStatus = weeklyChallengesUsers[0].completed;
-              const userChallengeList = userChallengesTemp;
-              setUserCompleted(completedStatus);
-              setUserChallenges(userChallengeList);
-              console.log("oh well 1");
-              console.log(completedStatus);
-              console.log(userChallengeList);
-              console.log("oh well 2");
-            }
-          }
-        };
-
         const challengeList: { [key: number]: string } = {
           "0": "challenge1",
           "1": "challenge2",
@@ -241,32 +197,100 @@ function App() {
           "4": "challenge5",
         };
 
-        weeklyChallenges.map(async (challenge, index) => {
-          const [challenge_amount] = challenge.name.split("#");
-          const challengeAmount = parseFloat(challenge_amount);
-          await analyzeChallenge(
-            challenge.criteria,
-            challenge.value,
-            challengeList[index],
-            challengeAmount,
-            nutrients,
-            units
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.getUser();
+        if (!user || error) return;
+
+        const userId = user.id;
+
+        const { data, error: fetchError } = await supabase
+          .from("WeeklyChallengesUsers")
+          .select(
+            "challenge1, challenge2, challenge3, challenge4, challenge5, completed"
+          )
+          .eq("user_id", userId)
+          .single();
+
+        if (fetchError || !data) {
+          console.error("Failed to fetch challenge progress", fetchError);
+          return;
+        }
+
+        const updatedChallengeProgress = [
+          data.challenge1 || 0,
+          data.challenge2 || 0,
+          data.challenge3 || 0,
+          data.challenge4 || 0,
+          data.challenge5 || 0,
+          data.completed || 0,
+        ] || [0, 0, 0, 0, 0, 0];
+
+        const tempCompleted = [0, 0, 0, 0, 0];
+
+        await Promise.all(
+          weeklyChallenges.map(async (challenge, index) => {
+            const [challenge_amount] = challenge.name.split("#");
+            const challengeAmount = parseFloat(challenge_amount);
+            const [challengeProgress, completedProgresss] =
+              await analyzeChallenge(
+                challenge.criteria,
+                challenge.value,
+                challengeList[index],
+                updatedChallengeProgress,
+                challengeAmount,
+                nutrients,
+                units
+              );
+            // SPREAD OUT COMPLETED INTO ARRAY THEN ADD ALL TOGEHTER IN THE END
+            // Update the challenge progress in the copied array
+
+            updatedChallengeProgress[index] = challengeProgress;
+            tempCompleted[index] = completedProgresss;
+          })
+        );
+
+        const copyChallengeProgress = updatedChallengeProgress.slice(0, 5);
+        const totalCompleted: number =
+          tempCompleted.reduce((acc, val) => acc + val, 0) +
+          updatedChallengeProgress[5];
+        setUserChallenges(copyChallengeProgress || []);
+        setUserCompleted(totalCompleted || 0);
+
+        const updateDatabase = async () => {
+          const {
+            data: { user },
+            error,
+          } = await supabase.auth.getUser();
+          if (!user || error) return;
+
+          const userId = user.id;
+          console.log(updatedChallengeProgress);
+          await supabase.from("WeeklyChallengesUsers").upsert(
+            [
+              {
+                user_id: userId,
+                challenge1: copyChallengeProgress[0] || 0,
+                challenge2: copyChallengeProgress[1] || 0,
+                challenge3: copyChallengeProgress[2] || 0,
+                challenge4: copyChallengeProgress[3] || 0,
+                challenge5: copyChallengeProgress[4] || 0,
+                completed: totalCompleted || 0,
+              },
+            ],
+            { onConflict: "user_id" }
           );
-        });
+        };
 
-        await fetchUserData();
+        updateDatabase();
 
-        //analyzeChallenge(
-        // nutrientName:
-        //challenge: string,
-        //challengeKey: string,
-        //challengeAmount: number,
-        //challengeProgress: number[],
-        //challengeComplete: number,
-        //setUserChallenges,
-        //nutrients,
-        //units
-        //)
+        //
+        //
+        //
+        //
+        //
+        //
 
         const preferences = await getUserPreferences();
         //console.log(preferences);

@@ -1,115 +1,57 @@
 import { supabase } from "../supabaseClient";
 
-async function handleChallengeSuccess(challengeKey: string, challengeAmount: number) {
+async function handleChallengeSuccess(challengeKey: string, challengeAmount: number, updatedChallengeProgress: number[]): Promise<[number, number]> {
     console.log(`Success for ${challengeKey} with out of ${challengeAmount}`);
 
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
-    if (!user || error) return;
-  
-    const userId = user.id;
-  
-    // ✅ 1. Fetch latest challenge progress from DB
-    const { data, error: fetchError } = await supabase
-      .from("WeeklyChallengesUsers")
-      .select("challenge1, challenge2, challenge3, challenge4, challenge5, completed")
-      .eq("user_id", userId)
-      .single();
-  
-    if (fetchError || !data) {
-      console.error("Failed to fetch challenge progress", fetchError);
-      return;
-    }
-  
-    const updatedChallengeProgress = [
-      data.challenge1 || 0,
-      data.challenge2 || 0,
-      data.challenge3 || 0,
-      data.challenge4 || 0,
-      data.challenge5 || 0,
-      data.completed || 0,
-    ];
-
-    console.log('you see')
-    console.log(updatedChallengeProgress)
-    console.log('you see2')
 
     if (challengeKey === 'challenge1'){
-        if (updatedChallengeProgress[0] > challengeAmount) {
+        if (updatedChallengeProgress[0] >= challengeAmount) {
+          return [0,0]
         } else {
-            updatedChallengeProgress[0] += 1;
-            if (updatedChallengeProgress[0] === challengeAmount){
-                updatedChallengeProgress[5] += 1;
-                updatedChallengeProgress[0] += 1;
-            }   
+            if ((updatedChallengeProgress[0]+1) === challengeAmount){
+              return [2,1] 
+            }
+            return [1,0]    
         }
     } else if (challengeKey === 'challenge2'){
-        if (updatedChallengeProgress[1] > challengeAmount) {
+        if (updatedChallengeProgress[1] >= challengeAmount) {
+          return [0,0]
         } else {
-            updatedChallengeProgress[1] += 1;
-            if (updatedChallengeProgress[1] === challengeAmount){
-                updatedChallengeProgress[5] += 1;
-                updatedChallengeProgress[1] += 1;
-            }   
+            if ((updatedChallengeProgress[1]+1) === challengeAmount){
+              return [2,1] 
+            }
+            return [1,0] 
         }
     } else if (challengeKey === 'challenge3'){
-        if (updatedChallengeProgress[2] > challengeAmount) {
+        if (updatedChallengeProgress[2] >= challengeAmount) {
+          return [0,0]
         } else {
-            updatedChallengeProgress[2] += 1;
-            if (updatedChallengeProgress[2] === challengeAmount){
-                updatedChallengeProgress[5] += 1;
-                updatedChallengeProgress[2] += 1;
-            }   
+            if ((updatedChallengeProgress[2]+1) === challengeAmount){
+              return [2,1] 
+            }
+            return [1,0] 
         }
     } else if (challengeKey === 'challenge4'){
-        if (updatedChallengeProgress[3] > challengeAmount) {
+        if (updatedChallengeProgress[3] >= challengeAmount) {
+          return [0,0]
         } else {
-            updatedChallengeProgress[3] += 1;
-            if (updatedChallengeProgress[3] === challengeAmount){
-                updatedChallengeProgress[5] += 1;
-                updatedChallengeProgress[3] += 1;
-            }   
+            if ((updatedChallengeProgress[3]+1) === challengeAmount){
+              return [2,1] 
+            }
+            return [1,0] 
         }
     } else if (challengeKey === 'challenge5'){
-        if (updatedChallengeProgress[4] > challengeAmount) {
+        if (updatedChallengeProgress[4] >= challengeAmount) {
+          return [0,0]
         } else {
-            updatedChallengeProgress[4] += 1;
-            if (updatedChallengeProgress[4] === challengeAmount){
-                updatedChallengeProgress[5] += 1;
-                updatedChallengeProgress[4] += 1;
-            }   
+            if ((updatedChallengeProgress[4]+1) === challengeAmount){
+              return [2,1] 
+            }
+            return [1,0] 
         }
     }
 
-
-    const updateDatabase = async () => {
-        const {
-          data: { user },
-          error,
-        } = await supabase.auth.getUser();
-        if (!user || error) return;
-
-        const userId = user.id;
-        console.log(updatedChallengeProgress)        
-        await supabase.from("WeeklyChallengesUsers").upsert(
-            [
-              {
-                user_id: userId,
-                challenge1: updatedChallengeProgress[0] || 0,
-                challenge2: updatedChallengeProgress[1] || 0,
-                challenge3: updatedChallengeProgress[2] || 0,
-                challenge4: updatedChallengeProgress[3] || 0,
-                challenge5: updatedChallengeProgress[4] || 0,
-                completed: updatedChallengeProgress[5] || 0
-              },
-            ],
-            { onConflict: "user_id" }
-          );
-  }
-
-  updateDatabase()
+    return [0,0]
 }
   
 
@@ -142,10 +84,11 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
     nutrientName: string,
     challenge: string,
     challengeKey: string,
+    updatedChallengeProgress: number[],
     challengeAmount: number,
     nutrients: { [key: string]: number },
     units: { [key: string]: string } 
-  ) {
+  ): Promise<[number, number]> {
 
     console.log('working 1')
     console.log(challenge)
@@ -159,7 +102,7 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
     
     if (!(nutrientName in nutrients)) {
       console.warn(`Nutrient ${nutrientName} not found in nutrients list.`);
-      return;
+      return [0,0];
     }
   
     const nutrientValue = nutrients[nutrientName];
@@ -176,8 +119,8 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
     }
   
     if (challengeSatisfied) {
-      await handleChallengeSuccess(challengeKey, challengeAmount);
+      return await handleChallengeSuccess(challengeKey, challengeAmount, updatedChallengeProgress);
     } else {
-      //console.log(`Challenge for ${nutrientName} not satisfied. Current value: ${targetValue}`);
+      return [0,0]
     }
   }
