@@ -370,6 +370,7 @@ function App() {
 
         console.log("loadWeeklyChallenges");
         console.log(loadWeeklyChallenges);
+        loadWeeklyChallenges();
 
         if (
           copyChallengeProgress[0] - copiedUpdatedChallengeProgress[0] ===
