@@ -89,6 +89,7 @@ function App() {
           .eq("user_id", userId)
           .single(); // .single() ensures we get a single row or nothing
 
+        console.log(data);
         if (checkError && checkError.code === "PGRST116") {
           // If no data found (user doesn't have a row yet), create a new row
           const { error: insertError } = await supabase
