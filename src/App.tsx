@@ -330,8 +330,10 @@ function App() {
         };
 
         //copyChallengeProgress;
-        showTempPopup("copyChallengeProgress");
 
+        showTempPopup("copyChallengeProgress");
+        showTempPopup("3333");
+        showTempPopup("94852709572");
         updateDatabase();
 
         //
