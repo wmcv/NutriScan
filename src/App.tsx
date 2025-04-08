@@ -24,7 +24,6 @@ function App() {
   const [ecoscoreGrade, setEcoscoreGrade] = useState("NaN");
   const [foodGroups, setFoodGroups] = useState("NaN");
   const [glutenFree, setGlutenFree] = useState(false);
-  const [loadChallenge, setLoadChallenge] = useState(false);
   const [userChallenges, setUserChallenges] = useState<number[]>([]);
   const [userCompleted, setUserCompleted] = useState<number>(0);
   const [productNutrients, setproductNutrients] = useState<{
@@ -230,6 +229,27 @@ function App() {
           }
         };
 
+        const challengeList: { [key: number]: string } = {
+          "0": "challenge1",
+          "1": "challenge2",
+          "2": "challenge3",
+          "3": "challenge4",
+          "4": "challenge5",
+        };
+
+        weeklyChallenges.map((challenge, index) => {
+          const [challenge_amount] = challenge.name.split("#");
+          const challengeAmount = parseFloat(challenge_amount);
+          analyzeChallenge(
+            challenge.criteria,
+            challenge.value,
+            challengeList[index],
+            challengeAmount,
+            nutrients,
+            units
+          );
+        });
+
         await fetchUserData();
 
         //analyzeChallenge(
@@ -260,43 +280,7 @@ function App() {
       }
     };
     getInfo();
-    setLoadChallenge(!loadChallenge);
   }, [barcode]);
-
-  useEffect(() => {
-    const challengeList: { [key: number]: string } = {
-      "0": "challenge1",
-      "1": "challenge2",
-      "2": "challenge3",
-      "3": "challenge4",
-      "4": "challenge5",
-    };
-    console.log("help");
-    if (
-      productNutrients &&
-      productUnits &&
-      userChallenges.length &&
-      weeklyChallenges.length
-    ) {
-      console.log("help no longer");
-      weeklyChallenges.map((challenge, index) => {
-        const [challenge_amount] = challenge.name.split("#");
-        const challengeAmount = parseFloat(challenge_amount);
-        analyzeChallenge(
-          challenge.criteria,
-          challenge.value,
-          challengeList[index],
-          challengeAmount,
-          userChallenges,
-          userCompleted,
-          setUserChallenges,
-          setUserCompleted,
-          productNutrients,
-          productUnits
-        );
-      });
-    }
-  }, [loadChallenge]);
 
   return (
     <Grid

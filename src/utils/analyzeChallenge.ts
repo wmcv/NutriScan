@@ -1,9 +1,37 @@
 import { supabase } from "../supabaseClient";
 
-function handleChallengeSuccess(challengeKey: string, challengeComplete: number, challengeProgress: number[], setUserCompleted: React.Dispatch<React.SetStateAction<number>>, setUserChallenge: React.Dispatch<React.SetStateAction<number[]>>, challengeAmount: number) {
+async function handleChallengeSuccess(challengeKey: string, challengeAmount: number) {
     console.log(`Success for ${challengeKey} with out of ${challengeAmount}`);
-    const updatedChallengeProgress = [...challengeProgress];
-    updatedChallengeProgress[5] = challengeComplete
+
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    if (!user || error) return;
+  
+    const userId = user.id;
+  
+    // ✅ 1. Fetch latest challenge progress from DB
+    const { data, error: fetchError } = await supabase
+      .from("WeeklyChallengesUsers")
+      .select("challenge1, challenge2, challenge3, challenge4, challenge5, completed")
+      .eq("user_id", userId)
+      .single();
+  
+    if (fetchError || !data) {
+      console.error("Failed to fetch challenge progress", fetchError);
+      return;
+    }
+  
+    const updatedChallengeProgress = [
+      data.challenge1 || 0,
+      data.challenge2 || 0,
+      data.challenge3 || 0,
+      data.challenge4 || 0,
+      data.challenge5 || 0,
+      data.completed || 0,
+    ];
+
     if (challengeKey === 'challenge1'){
         if (updatedChallengeProgress[0] > challengeAmount) {
         } else {
@@ -65,7 +93,7 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
             [
               {
                 user_id: userId,
-                challenge1: updatedChallengeProgress[0] || 0,
+                [challengeKey]: updatedChallengeProgress[0] || 0,
                 challenge2: updatedChallengeProgress[1] || 0,
                 challenge3: updatedChallengeProgress[2] || 0,
                 challenge4: updatedChallengeProgress[3] || 0,
@@ -78,10 +106,6 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
   }
 
   updateDatabase()
-
-  setUserCompleted(updatedChallengeProgress[5])
-  const newChallengeProgress = updatedChallengeProgress.slice(0, 5)
-  setUserChallenge(newChallengeProgress)
 }
   
 
@@ -115,10 +139,6 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
     challenge: string,
     challengeKey: string,
     challengeAmount: number,
-    challengeProgress: number[],
-    challengeComplete: number,
-    setUserChallenge: React.Dispatch<React.SetStateAction<number[]>>,
-    setUserCompleted: React.Dispatch<React.SetStateAction<number>>,
     nutrients: { [key: string]: number },
     units: { [key: string]: string } 
   ) {
@@ -126,8 +146,6 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
     console.log('working 1')
     console.log(challenge)
     console.log(challengeKey)
-    console.log(challengeProgress)
-    console.log(challengeComplete)
     console.log(nutrients)
     console.log(nutrientName)
     console.log(challengeAmount)
@@ -154,7 +172,7 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
     }
   
     if (challengeSatisfied) {
-      handleChallengeSuccess(challengeKey, challengeComplete, challengeProgress, setUserCompleted, setUserChallenge, challengeAmount);
+      handleChallengeSuccess(challengeKey, challengeAmount);
     } else {
       //console.log(`Challenge for ${nutrientName} not satisfied. Current value: ${targetValue}`);
     }
