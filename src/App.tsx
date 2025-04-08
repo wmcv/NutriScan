@@ -239,7 +239,7 @@ function App() {
             // SPREAD OUT COMPLETED INTO ARRAY THEN ADD ALL TOGEHTER IN THE END
             // Update the challenge progress in the copied array
 
-            updatedChallengeProgress[index] = challengeProgress;
+            updatedChallengeProgress[index] += challengeProgress;
             tempCompleted[index] = completedProgresss;
           })
         );
