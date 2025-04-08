@@ -73,7 +73,6 @@ function App() {
     };
 
     const checkAndCreateUserChallenges = async () => {
-      // Get the user from Supabase auth
       const {
         data: { user },
         error,
@@ -82,16 +81,14 @@ function App() {
       if (user && !error) {
         const userId = user.id;
 
-        // Check if the user already has an entry in the WeeklyChallengesUsers table
         const { data, error: checkError } = await supabase
           .from("WeeklyChallengesUsers")
           .select("*")
           .eq("user_id", userId)
-          .single(); // .single() ensures we get a single row or nothing
+          .single();
 
         console.log(data);
         if (checkError && checkError.code === "PGRST116") {
-          // If no data found (user doesn't have a row yet), create a new row
           const { error: insertError } = await supabase
             .from("WeeklyChallengesUsers")
             .upsert(
@@ -130,7 +127,6 @@ function App() {
     const getInfo = async () => {
       if (barcode && barcode !== "empty") {
         const product = await fetchProduct(barcode);
-        //const product_name = product.product_name;
         const product_name =
           product.product_name_en || product.product_name || "NaN";
         setProductName(product_name || "NaN");
@@ -192,6 +188,7 @@ function App() {
           false;
         setGlutenFree(isGlutenFree);
         console.log(glutenFree);
+
         const fetchUserData = async () => {
           const {
             data: { user },
@@ -217,7 +214,7 @@ function App() {
             }
 
             if (weeklyChallengesUsers?.length) {
-              const userChallenges = [
+              const userChallengesTemp = [
                 weeklyChallengesUsers[0].challenge1,
                 weeklyChallengesUsers[0].challenge2,
                 weeklyChallengesUsers[0].challenge3,
@@ -227,14 +224,17 @@ function App() {
 
               const completedStatus = weeklyChallengesUsers[0].completed;
 
-              setUserChallenges(userChallenges);
+              setUserChallenges(userChallengesTemp);
               setUserCompleted(completedStatus);
             }
           }
         };
 
         fetchUserData();
-
+        console.log("check");
+        console.log(userChallenges);
+        console.log(userCompleted);
+        console.log("check");
         const challengeList: { [key: number]: string } = {
           "0": "challenge1",
           "1": "challenge2",
