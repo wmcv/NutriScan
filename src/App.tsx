@@ -142,7 +142,9 @@ function App() {
 
     getInfo();
   }, [barcode]);
-
+  {
+    console.log(productUnits);
+  }
   return (
     <Grid templateAreas={`"nav" "cam" "divider1" "AI" "divider2" "info"`}>
       <GridItem area="nav">
@@ -159,7 +161,6 @@ function App() {
         <AIInfo aiResponse={AIMessage} />
       </GridItem>
       <GridItem area="divider2">
-        console.log(productUnits)
         <Divider borderColor="gray.300" my={2} />
       </GridItem>
       <GridItem area="info">
