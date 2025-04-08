@@ -124,8 +124,9 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
   ) {
 
     console.log('working 1')
-    console.log(challengeProgress)
-    console.log(challengeComplete)
+    console.log(nutrients)
+    console.log(nutrientName)
+    console.log(challengeAmount)
     console.log('working 2')
     const [condition, quantityString, unit] = challenge.split("#");
     const quantity = parseFloat(quantityString);
