@@ -88,13 +88,6 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
     units: { [key: string]: string } 
   ): Promise<[number, number]> {
 
-    console.log('working 1')
-    console.log(challenge)
-    console.log(challengeKey)
-    console.log(nutrients)
-    console.log(nutrientName)
-    console.log(challengeAmount)
-    console.log('working 2')
     const [condition, quantityString, unit] = challenge.split("#");
     const quantity = parseFloat(quantityString);
     

@@ -23,7 +23,6 @@ function App() {
   const [productIngredients, setProductIngredients] = useState("Ingredients");
   const [ecoscoreGrade, setEcoscoreGrade] = useState("NaN");
   const [foodGroups, setFoodGroups] = useState("NaN");
-  const [glutenFree, setGlutenFree] = useState(false);
   const [userChallenges, setUserChallenges] = useState<number[]>([]);
   const [userCompleted, setUserCompleted] = useState<number>(0);
   const [productNutrients, setproductNutrients] = useState<{
@@ -181,14 +180,6 @@ function App() {
         setproductUnits(units);
         setproductNutrients(nutrients);
 
-        const isGlutenFree =
-          product.labels_tags?.includes("en:no-gluten") ||
-          product.ingredients_analysis_tags?.includes("en:gluten-free") ||
-          product.labels?.toLowerCase().includes("gluten-free") ||
-          false;
-        setGlutenFree(isGlutenFree);
-        console.log(glutenFree);
-
         const challengeList: { [key: number]: string } = {
           "0": "challenge1",
           "1": "challenge2",
@@ -226,7 +217,9 @@ function App() {
           data.challenge5 || 0,
           data.completed || 0,
         ];
-
+        console.log("take1");
+        console.log(updatedChallengeProgress);
+        console.log("take2");
         const tempCompleted = [0, 0, 0, 0, 0];
 
         await Promise.all(
