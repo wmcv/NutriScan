@@ -97,7 +97,7 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
             [
               {
                 user_id: userId,
-                [challengeKey]: updatedChallengeProgress[0] || 0,
+                challenge1: updatedChallengeProgress[0] || 0,
                 challenge2: updatedChallengeProgress[1] || 0,
                 challenge3: updatedChallengeProgress[2] || 0,
                 challenge4: updatedChallengeProgress[3] || 0,
@@ -138,7 +138,7 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
   }
   
 
-  export function analyzeChallenge(
+  export async function analyzeChallenge(
     nutrientName: string,
     challenge: string,
     challengeKey: string,
@@ -176,7 +176,7 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
     }
   
     if (challengeSatisfied) {
-      handleChallengeSuccess(challengeKey, challengeAmount);
+      await handleChallengeSuccess(challengeKey, challengeAmount);
     } else {
       //console.log(`Challenge for ${nutrientName} not satisfied. Current value: ${targetValue}`);
     }

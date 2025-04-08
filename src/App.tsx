@@ -241,10 +241,10 @@ function App() {
           "4": "challenge5",
         };
 
-        weeklyChallenges.map((challenge, index) => {
+        weeklyChallenges.map(async (challenge, index) => {
           const [challenge_amount] = challenge.name.split("#");
           const challengeAmount = parseFloat(challenge_amount);
-          analyzeChallenge(
+          await analyzeChallenge(
             challenge.criteria,
             challenge.value,
             challengeList[index],
