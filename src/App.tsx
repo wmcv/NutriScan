@@ -256,8 +256,8 @@ function App() {
               userCompletedStatus,
               setUserChallenges,
               setUserCompleted,
-              productNutrients || {},
-              productUnits || {}
+              nutrients,
+              units
             );
           });
         });
