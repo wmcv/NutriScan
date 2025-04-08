@@ -16,29 +16,15 @@ interface ProductInfoProps {
   servingSize: string;
   productIngredients: string;
   productNutrients: Record<string, any>;
+  productUnits: Record<string, any>;
 }
-
-const nutrientUnits: Record<string, string> = {
-  energy_kcal: "kcal",
-  fat: "g",
-  saturated_fat: "g",
-  trans_fat: "g",
-  cholesterol: "g",
-  carbohydrates: "g",
-  sugars: "g",
-  fiber: "g",
-  proteins: "g",
-  salt: "g",
-  sodium: "g",
-  iron: "g",
-  calcium: "g",
-};
 
 const ProductInfo: React.FC<ProductInfoProps> = ({
   productName,
   servingSize,
   productIngredients,
   productNutrients,
+  productUnits,
 }) => {
   if (!productName) return <Text>No product scanned yet.</Text>;
 
@@ -82,7 +68,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
             const formattedKey = key
               .replace(/_/g, " ")
               .replace(/\b\w/g, (char) => char.toUpperCase());
-            const unit = nutrientUnits[key] || "";
+            const unit = productUnits[key] || "";
 
             return (
               <Tr key={key}>

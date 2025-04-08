@@ -142,9 +142,6 @@ function App() {
 
     getInfo();
   }, [barcode]);
-  {
-    console.log(productUnits);
-  }
   return (
     <Grid templateAreas={`"nav" "cam" "divider1" "AI" "divider2" "info"`}>
       <GridItem area="nav">
@@ -169,6 +166,7 @@ function App() {
           servingSize={servingSize}
           productIngredients={productIngredients}
           productNutrients={productNutrients || {}}
+          productUnits={productUnits || {}}
         />
       </GridItem>
     </Grid>
