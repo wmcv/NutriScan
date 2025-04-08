@@ -159,6 +159,7 @@ function App() {
         <AIInfo aiResponse={AIMessage} />
       </GridItem>
       <GridItem area="divider2">
+        console.log(productUnits)
         <Divider borderColor="gray.300" my={2} />
       </GridItem>
       <GridItem area="info">
