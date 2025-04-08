@@ -64,7 +64,11 @@ function App() {
           sugars: nutriments.sugars || 0,
           fiber: nutriments.fiber || 0,
           proteins: nutriments.proteins || 0,
-          potassium: nutriments.potassium || 0,
+          potassium:
+            nutriments["potassium_100g"] ||
+            nutriments["potassium_serving"] ||
+            nutriments["potassium"] ||
+            0,
           vitamin_d: nutriments["vitamin-d"] || nutriments["vitamin_d"] || 0,
           salt: nutriments.salt || 0,
           sodium: nutriments.sodium || 0,
@@ -80,6 +84,10 @@ function App() {
           false;
         setGlutenFree(isGlutenFree);
         console.log(glutenFree);
+        console.log(product.nutriments["fiber_unit"]);
+        console.log(product.nutriments.vitamin_d);
+        console.log(product.nutriments["vitamin-d"]);
+        console.log(product.nutriments);
         console.log(nutrients["vitamin_d"]);
         const preferences = await getUserPreferences();
         //console.log(preferences);
