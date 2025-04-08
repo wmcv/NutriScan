@@ -218,11 +218,11 @@ function App() {
               console.log(weeklyChallengesUsers);
               console.log("temp check");
               const userChallengesTemp = [
-                weeklyChallengesUsers[0].challenge1,
-                weeklyChallengesUsers[0].challenge2,
-                weeklyChallengesUsers[0].challenge3,
-                weeklyChallengesUsers[0].challenge4,
-                weeklyChallengesUsers[0].challenge5,
+                weeklyChallengesUsers[0]["challenge1"],
+                weeklyChallengesUsers[0]["challenge2"],
+                weeklyChallengesUsers[0]["challenge3"],
+                weeklyChallengesUsers[0]["challenge4"],
+                weeklyChallengesUsers[0]["challenge5"],
               ];
 
               const completedStatus = weeklyChallengesUsers[0].completed;
