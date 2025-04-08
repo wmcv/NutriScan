@@ -8,8 +8,12 @@ import ProductInfo from "./components/ProductInfo";
 import { analyzeProduct } from "./utils/analyzeProduct";
 import { getUserPreferences } from "./utils/getUserPreferences";
 import AIInfo from "./components/AIInfo";
+import WeekChallenges from "./components/WeekChallenges";
+import { supabase } from "./supabaseClient";
+import { Challenge } from "./types";
 
 function App() {
+  const [weeklyChallenges, setWeeklyChallenges] = useState<Challenge[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [barcode, setBarcode] = useState("empty");
   const [AIMessage, setAIMessage] = useState("empty");
@@ -19,6 +23,8 @@ function App() {
   const [ecoscoreGrade, setEcoscoreGrade] = useState("NaN");
   const [foodGroups, setFoodGroups] = useState("NaN");
   const [glutenFree, setGlutenFree] = useState(false);
+  const [userChallenges, setUserChallenges] = useState<number[]>([]);
+  const [userCompleted, setUserCompleted] = useState<number>(0);
   const [productNutrients, setproductNutrients] = useState<{
     energy_kcal: number;
     fat: number;
@@ -52,6 +58,61 @@ function App() {
     iron: string;
     calcium: string;
   } | null>(null);
+
+  useEffect(() => {
+    const loadWeeklyChallenges = async () => {
+      const { data, error } = await supabase
+        .from("WeeklyChallenges")
+        .select("*");
+      if (error) {
+        console.error("Error fetching weekly challenges:", error);
+      } else {
+        setWeeklyChallenges(data);
+      }
+    };
+
+    const fetchUserData = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (user && !error) {
+        const userId = user.id;
+
+        const { data: weeklyChallengesUsers, error: weeklyChallengesError } =
+          await supabase
+            .from("WeeklyChallengesUsers")
+            .select(
+              "challenge1, challenge2, challenge3, challenge4, challenge5, completed"
+            )
+            .eq("user_id", userId);
+
+        if (weeklyChallengesError) {
+          console.error(weeklyChallengesError);
+          return;
+        }
+
+        if (weeklyChallengesUsers?.length) {
+          const userChallenges = [
+            weeklyChallengesUsers[0].challenge1,
+            weeklyChallengesUsers[0].challenge2,
+            weeklyChallengesUsers[0].challenge3,
+            weeklyChallengesUsers[0].challenge4,
+            weeklyChallengesUsers[0].challenge5,
+          ];
+
+          const completedStatus = weeklyChallengesUsers[0].completed;
+
+          setUserChallenges(userChallenges);
+          setUserCompleted(completedStatus);
+        }
+      }
+    };
+
+    loadWeeklyChallenges();
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     const getInfo = async () => {
@@ -143,7 +204,9 @@ function App() {
     getInfo();
   }, [barcode]);
   return (
-    <Grid templateAreas={`"nav" "cam" "divider1" "AI" "divider2" "info"`}>
+    <Grid
+      templateAreas={`"nav" "cam" "divider1" "AI" "divider2" "info" "temp"`}
+    >
       <GridItem area="nav">
         <NavBar toggleSettings={setSettingsOpen} settingsOpen={settingsOpen} />
         {settingsOpen && <MenuFrame setMenuOpen={setSettingsOpen} />}
@@ -168,6 +231,13 @@ function App() {
           productNutrients={productNutrients || {}}
           productUnits={productUnits || {}}
         />
+      </GridItem>
+      <GridItem area="temp">
+        {userCompleted}
+        <WeekChallenges
+          userChallenge={userChallenges}
+          challenges={weeklyChallenges}
+        ></WeekChallenges>
       </GridItem>
     </Grid>
   );
