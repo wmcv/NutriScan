@@ -72,7 +72,57 @@ function App() {
       }
     };
 
+    const checkAndCreateUserChallenges = async () => {
+      // Get the user from Supabase auth
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (user && !error) {
+        const userId = user.id;
+
+        // Check if the user already has an entry in the WeeklyChallengesUsers table
+        const { data, error: checkError } = await supabase
+          .from("WeeklyChallengesUsers")
+          .select("*")
+          .eq("user_id", userId)
+          .single(); // .single() ensures we get a single row or nothing
+
+        if (checkError && checkError.code === "PGRST116") {
+          // If no data found (user doesn't have a row yet), create a new row
+          const { error: insertError } = await supabase
+            .from("WeeklyChallengesUsers")
+            .upsert(
+              [
+                {
+                  user_id: userId,
+                  challenge1: 0,
+                  challenge2: 0,
+                  challenge3: 0,
+                  challenge4: 0,
+                  challenge5: 0,
+                  completed: 0,
+                },
+              ],
+              { onConflict: "user_id" }
+            );
+
+          if (insertError) {
+            console.error("Error creating new row for user:", insertError);
+          } else {
+            console.log("New row created for user:", userId);
+          }
+        } else if (checkError) {
+          console.error("Error checking for existing user row:", checkError);
+        } else {
+          console.log("User already has a row in WeeklyChallengesUsers");
+        }
+      }
+    };
+
     loadWeeklyChallenges();
+    checkAndCreateUserChallenges();
   }, []);
 
   useEffect(() => {
