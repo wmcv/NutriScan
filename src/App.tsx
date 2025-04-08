@@ -124,40 +124,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const challengeList: { [key: number]: string } = {
-      "0": "challenge1",
-      "1": "challenge2",
-      "2": "challenge3",
-      "3": "challenge4",
-      "4": "challenge5",
-    };
-
-    console.log("************");
-    console.log(productNutrients);
-    console.log(productUnits);
-    console.log(userChallenges);
-    console.log(userCompleted);
-
-    weeklyChallenges.map((challenge, index) => {
-      const [challenge_amount] = challenge.name.split("#");
-      const challengeAmount = parseFloat(challenge_amount);
-
-      analyzeChallenge(
-        challenge.criteria,
-        challenge.value,
-        challengeList[index],
-        challengeAmount,
-        userChallenges,
-        userCompleted,
-        setUserChallenges,
-        setUserCompleted,
-        productNutrients || {},
-        productUnits || {}
-      );
-    });
-  }, [productNutrients, productUnits]);
-
-  useEffect(() => {
     const getInfo = async () => {
       if (barcode && barcode !== "empty") {
         const product = await fetchProduct(barcode);
@@ -263,6 +229,32 @@ function App() {
 
               setUserChallenges(userChallengesTemp);
               setUserCompleted(completedStatus);
+
+              const challengeList: { [key: number]: string } = {
+                "0": "challenge1",
+                "1": "challenge2",
+                "2": "challenge3",
+                "3": "challenge4",
+                "4": "challenge5",
+              };
+
+              weeklyChallenges.map((challenge, index) => {
+                const [challenge_amount] = challenge.name.split("#");
+                const challengeAmount = parseFloat(challenge_amount);
+
+                analyzeChallenge(
+                  challenge.criteria,
+                  challenge.value,
+                  challengeList[index],
+                  challengeAmount,
+                  userChallengesTemp,
+                  completedStatus,
+                  setUserChallenges,
+                  setUserCompleted,
+                  productNutrients || {},
+                  productUnits || {}
+                );
+              });
             }
           }
         };
