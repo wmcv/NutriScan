@@ -76,7 +76,9 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
             { onConflict: "user_id" }
           );
   }
-  setUserChallenge(updatedChallengeProgress)
+  setUserCompleted(updatedChallengeProgress[5])
+  const newChallengeProgress = updatedChallengeProgress.slice(0, 5)
+  setUserChallenge(newChallengeProgress)
 }
   
 
