@@ -225,7 +225,7 @@ function App() {
           data.challenge4 || 0,
           data.challenge5 || 0,
           data.completed || 0,
-        ] || [0, 0, 0, 0, 0, 0];
+        ];
 
         const tempCompleted = [0, 0, 0, 0, 0];
 
