@@ -123,6 +123,10 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
     units: { [key: string]: string } 
   ) {
 
+    console.log('working 1')
+    console.log(challengeProgress)
+    console.log(challengeComplete)
+    console.log('working 2')
     const [condition, quantityString, unit] = challenge.split("#");
     const quantity = parseFloat(quantityString);
     

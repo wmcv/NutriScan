@@ -246,7 +246,7 @@ function App() {
           weeklyChallenges.map((challenge, index) => {
             const [challenge_amount] = challenge.name.split("#");
             const challengeAmount = parseFloat(challenge_amount);
-
+            console.log("working ${index}");
             analyzeChallenge(
               challenge.criteria,
               challenge.value,
