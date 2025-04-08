@@ -155,7 +155,13 @@ function App() {
         productUnits || {}
       );
     });
-  }, []);
+  }, [
+    weeklyChallenges,
+    userChallenges,
+    userCompleted,
+    productNutrients,
+    productUnits,
+  ]);
 
   useEffect(() => {
     const getInfo = async () => {
