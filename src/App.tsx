@@ -72,7 +72,7 @@ function App() {
         };
         setproductNutrients(nutrients);
 
-        const isGlutenFree = product.labels || "NOT RIGHT";
+        const isGlutenFree = product.labels_tags || "NOT RIGHT";
         console.log(isGlutenFree);
         const preferences = await getUserPreferences();
         //console.log(preferences);
