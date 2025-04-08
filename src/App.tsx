@@ -18,6 +18,7 @@ function App() {
   const [productIngredients, setProductIngredients] = useState("Ingredients");
   const [ecoscoreGrade, setEcoscoreGrade] = useState("NaN");
   const [foodGroups, setFoodGroups] = useState("NaN");
+  const [glutenFree, setGlutenFree] = useState(false);
   const [productNutrients, setproductNutrients] = useState<{
     energy_kcal: number;
     fat: number;
@@ -72,8 +73,14 @@ function App() {
         };
         setproductNutrients(nutrients);
 
-        const isGlutenFree = product.labels_tags || "NOT RIGHT";
-        console.log(isGlutenFree);
+        const isGlutenFree =
+          product.labels_tags?.includes("en:no-gluten") ||
+          product.ingredients_analysis_tags?.includes("en:gluten-free") ||
+          product.labels?.toLowerCase().includes("gluten-free") ||
+          false;
+        setGlutenFree(isGlutenFree);
+        console.log(glutenFree);
+        console.log(nutrients["vitamin_d"]);
         const preferences = await getUserPreferences();
         //console.log(preferences);
         if (preferences) {
