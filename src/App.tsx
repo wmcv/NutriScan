@@ -48,9 +48,9 @@ function App() {
         setServingSize(servingsize);
 
         const ecoscoregrade = product.ecoscore_grade || "NaN";
-        setEcoscoreGrade(ecoscoregrade)
+        setEcoscoreGrade(ecoscoregrade);
         const foodgroups = product.food_groups || "NaN";
-        setFoodGroups(foodgroups)
+        setFoodGroups(foodgroups);
 
         const nutriments = product.nutriments || {};
         const nutrients = {
@@ -63,6 +63,8 @@ function App() {
           sugars: nutriments.sugars || 0,
           fiber: nutriments.fiber || 0,
           proteins: nutriments.proteins || 0,
+          potassium: nutriments.potassium || 0,
+          vitamin_d: nutriments["vitamin-d"] || 0,
           salt: nutriments.salt || 0,
           sodium: nutriments.sodium || 0,
           iron: nutriments.iron || 0,
@@ -70,6 +72,10 @@ function App() {
         };
         setproductNutrients(nutrients);
 
+        const isGlutenFree =
+          product.ingredients_analysis_tags?.includes("en:gluten-free") ||
+          false;
+        console.log(isGlutenFree);
         const preferences = await getUserPreferences();
         //console.log(preferences);
         if (preferences) {

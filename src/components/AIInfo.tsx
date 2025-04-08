@@ -41,7 +41,7 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ aiResponse }) => {
             fontSize="lg"
             fontWeight="bold"
           >
-            {rating}/10
+            {rating || "X"}/10
           </CircularProgressLabel>
         </CircularProgress>
 
