@@ -118,8 +118,45 @@ function App() {
       }
     };
 
+    const loadChallengeData = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+      if (!user || error) return;
+
+      const userId = user.id;
+
+      const { data, error: fetchError } = await supabase
+        .from("WeeklyChallengesUsers")
+        .select(
+          "challenge1, challenge2, challenge3, challenge4, challenge5, completed"
+        )
+        .eq("user_id", userId)
+        .single();
+
+      if (fetchError || !data) {
+        console.error("Failed to fetch challenge progress", fetchError);
+        return;
+      }
+
+      const loadChallengeProgress = [
+        data.challenge1 || 0,
+        data.challenge2 || 0,
+        data.challenge3 || 0,
+        data.challenge4 || 0,
+        data.challenge5 || 0,
+      ];
+
+      const loadChallengeComplete = data.completed || 0;
+
+      setUserChallenges(loadChallengeProgress);
+      setUserCompleted(loadChallengeComplete);
+    };
+
     loadWeeklyChallenges();
     checkAndCreateUserChallenges();
+    loadChallengeData();
   }, []);
 
   useEffect(() => {

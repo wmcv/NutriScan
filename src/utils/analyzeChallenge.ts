@@ -7,7 +7,7 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
           return [0,0]
         } else {
             if ((updatedChallengeProgress[0]+1) === challengeAmount){
-              return [2,1] 
+              return [1,1] 
             }
             return [1,0]    
         }
@@ -16,7 +16,7 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
           return [0,0]
         } else {
             if ((updatedChallengeProgress[1]+1) === challengeAmount){
-              return [2,1] 
+              return [1,1] 
             }
             return [1,0] 
         }
@@ -25,7 +25,7 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
           return [0,0]
         } else {
             if ((updatedChallengeProgress[2]+1) === challengeAmount){
-              return [2,1] 
+              return [1,1] 
             }
             return [1,0] 
         }
@@ -34,7 +34,7 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
           return [0,0]
         } else {
             if ((updatedChallengeProgress[3]+1) === challengeAmount){
-              return [2,1] 
+              return [1,1] 
             }
             return [1,0] 
         }
@@ -43,7 +43,7 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
           return [0,0]
         } else {
             if ((updatedChallengeProgress[4]+1) === challengeAmount){
-              return [2,1] 
+              return [1,1] 
             }
             return [1,0] 
         }
