@@ -29,10 +29,28 @@ function App() {
     sugars: number;
     fiber: number;
     proteins: number;
+    potassium: number;
     salt: number;
     sodium: number;
     iron: number;
     calcium: number;
+  } | null>(null);
+
+  const [productUnits, setproductUnits] = useState<{
+    energy_kcal: string;
+    fat: string;
+    saturated_fat: string;
+    trans_fat: string;
+    cholesterol: string;
+    carbohydrates: string;
+    sugars: string;
+    fiber: string;
+    proteins: string;
+    potassium: string;
+    salt: string;
+    sodium: string;
+    iron: string;
+    calcium: string;
   } | null>(null);
 
   useEffect(() => {
@@ -69,12 +87,30 @@ function App() {
             nutriments["potassium_serving"] ||
             nutriments["potassium"] ||
             0,
-          vitamin_d: nutriments["vitamin-d"] || nutriments["vitamin_d"] || 0,
           salt: nutriments.salt || 0,
           sodium: nutriments.sodium || 0,
           iron: nutriments.iron || 0,
           calcium: nutriments.calcium || 0,
         };
+
+        const units = {
+          energy_kcal: "kcal",
+          fat: nutriments["fat_unit"] || "g",
+          saturated_fat: nutriments["saturated-fat_unit"] || "g",
+          trans_fat: nutriments["trans-fat_unit"] || "g",
+          cholesterol: nutriments["cholesterol_unit"] || "g",
+          carbohydrates: nutriments["carbohydrates_unit"] || "g",
+          sugars: nutriments["sugars_unit"] || "g",
+          fiber: nutriments["fiber_unit"] || "g",
+          proteins: nutriments["proteins_unit"] || "g",
+          potassium: nutriments["potassium_unit"] || "g",
+          salt: nutriments["salt_unit"] || "g",
+          sodium: nutriments["sodium_unit"] || "g",
+          iron: nutriments["iron_unit"] || "g",
+          calcium: nutriments["calcium_unit"] || "g",
+        };
+        console.log(units);
+        setproductUnits(units);
         setproductNutrients(nutrients);
 
         const isGlutenFree =
@@ -86,9 +122,8 @@ function App() {
         console.log(glutenFree);
         console.log(product.nutriments["fiber_unit"]);
         console.log(product.nutriments.vitamin_d);
-        console.log(product.nutriments["vitamin-d"]);
         console.log(product.nutriments);
-        console.log(nutrients["vitamin_d"]);
+
         const preferences = await getUserPreferences();
         //console.log(preferences);
         if (preferences) {
