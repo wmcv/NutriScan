@@ -52,7 +52,7 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
     }
 
 
-    async () => {
+    const updateDatabase = async () => {
         const {
           data: { user },
           error,
@@ -76,6 +76,9 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
             { onConflict: "user_id" }
           );
   }
+
+  updateDatabase()
+
   setUserCompleted(updatedChallengeProgress[5])
   const newChallengeProgress = updatedChallengeProgress.slice(0, 5)
   setUserChallenge(newChallengeProgress)
