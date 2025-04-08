@@ -60,39 +60,21 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
         if (!user || error) return;
 
         const userId = user.id;
-
-
-        const { error: deleteError } = await supabase
-          .from("WeeklyChallengesUsers")
-          .delete()
-          .eq("user_id", userId);
-
-        if (deleteError) {
-          console.error("Error deleting user record:", deleteError);
-          return;
-        }
-
-
-        const { error: insertError } = await supabase
-          .from("WeeklyChallengesUsers")
-          .insert(
-          [
-            {
-            user_id: userId,
-            challenge1: updatedChallengeProgress[0] || 0,
-            challenge2: updatedChallengeProgress[1] || 0,
-            challenge3: updatedChallengeProgress[2] || 0,
-            challenge4: updatedChallengeProgress[3] || 0,
-            challenge5: updatedChallengeProgress[4] || 0,
-            completed: updatedChallengeProgress[5] || 0,
-            },
-          ]
-        );
-        if (insertError) {
-          console.error("Error inserting challenge progress:", insertError);
-        } else {
-          console.log("Challenge progress inserted successfully.");
-        }
+        console.log(updatedChallengeProgress)        
+        await supabase.from("WeeklyChallengesUsers").upsert(
+            [
+              {
+                user_id: userId,
+                challenge1: updatedChallengeProgress[0] || 0,
+                challenge2: updatedChallengeProgress[1] || 0,
+                challenge3: updatedChallengeProgress[2] || 0,
+                challenge4: updatedChallengeProgress[3] || 0,
+                challenge5: updatedChallengeProgress[4] || 0,
+                completed: updatedChallengeProgress[5] || 0
+              },
+            ],
+            { onConflict: "user_id" }
+          );
   }
 
   updateDatabase()
