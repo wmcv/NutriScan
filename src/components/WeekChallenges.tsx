@@ -48,8 +48,11 @@ function WeekChallenges({ userChallenge, challenges }: WeekChallengesProps) {
                 textAlign="left"
                 mb={0}
               >
-                {userChallenge.filter((progress) => progress > 0).length}/
-                {challenges.length}
+                {Math.min(
+                  userChallenge.filter((progress) => progress > 0).length,
+                  challenges.length
+                )}
+                /{challenges.length}
               </Text>
             </HStack>
           </VStack>
@@ -86,7 +89,8 @@ function WeekChallenges({ userChallenge, challenges }: WeekChallengesProps) {
                     textAlign="left"
                     mb={0}
                   >
-                    {userChallenge[index] || 0}/{totalCount}
+                    {Math.min(userChallenge[index], totalCount) || 0}/
+                    {totalCount}
                   </Text>
                 </HStack>
               </VStack>

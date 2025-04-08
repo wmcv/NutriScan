@@ -13,19 +13,42 @@ import { supabase } from "./supabaseClient";
 import { Challenge } from "./types";
 import { analyzeChallenge } from "./utils/analyzeChallenge";
 import TempPopup from "./components/TempPopup";
-import "./popup.css";
 
 function App() {
-  const [popups, setPopups] = useState<string[]>([]);
+  const [popupMessages, setPopupMessages] = useState<
+    {
+      message: string;
+      countPre: number;
+      countPost: number;
+      countTotal: number;
+    }[]
+  >([]);
 
-  const showTempPopup = (message: string) => {
-    setPopups((prev) => [...prev, message]);
+  const showTempPopup = (
+    message: string,
+    countPre: number,
+    countPost: number,
+    countTotal: number
+  ) => {
+    const index = popupMessages.length; // Use the length of the array as an index
+    setPopupMessages((prevMessages) => [
+      ...prevMessages,
+      { message, index, countPre, countPost, countTotal },
+    ]);
 
-    // Set a timeout to remove the popup after 3 seconds
+    // Set a timeout to remove the popup after the specified duration
     setTimeout(() => {
-      setPopups((prev) => prev.filter((_, i) => i !== 0)); // Remove the first popup
-    }, 3000); // 3 seconds
+      setPopupMessages((prevMessages) =>
+        prevMessages.filter((popup) => popup.message !== message)
+      );
+    }, 3000); // Use duration or default to 3000
   };
+
+  useEffect(() => {
+    showTempPopup("This 1!", 0, 0, 0);
+    showTempPopup("This 2!", 0, 0, 0);
+    showTempPopup("This 3!", 0, 0, 0);
+  }, []);
 
   const [weeklyChallenges, setWeeklyChallenges] = useState<Challenge[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -267,6 +290,11 @@ function App() {
           data.challenge5 || 0,
           data.completed || 0,
         ];
+        const copiedUpdatedChallengeProgress = updatedChallengeProgress.slice(
+          0,
+          5
+        );
+
         console.log("take1");
         console.log(updatedChallengeProgress);
         console.log("take2");
@@ -326,11 +354,36 @@ function App() {
           );
         };
 
-        //copyChallengeProgress;
+        //copiedUpdatedChallengeProgress    og
+        //copyChallengeProgress     new
+        const loadWeeklyChallenges = async () => {
+          const { data, error } = await supabase
+            .from("WeeklyChallenges")
+            .select("*");
+          if (error) {
+            console.error("Error fetching weekly challenges:", error);
+          } else {
+            console.log("data");
+            console.log(data);
+          }
+        };
 
-        showTempPopup("copyChallengeProgress");
-        showTempPopup("3333");
-        showTempPopup("94852709572");
+        console.log("loadWeeklyChallenges");
+        console.log(loadWeeklyChallenges);
+
+        if (
+          copyChallengeProgress[0] - copiedUpdatedChallengeProgress[0] ===
+          1
+        ) {
+          showTempPopup("a", 0, 0, 0);
+        }
+
+        //copyChallengeProgress;
+        showTempPopup("This 1!", 0, 0, 0);
+
+        //showTempPopup("copyChallengeProgress");
+        //showTempPopup("3333");
+        //showTempPopup("94852709572");
         updateDatabase();
 
         //
@@ -360,15 +413,15 @@ function App() {
 
   return (
     <div>
-      {popups.map((popupMessage, index) => (
+      {popupMessages.map((popup, index) => (
         <TempPopup
           key={index}
-          message={popupMessage}
-          onClose={() =>
-            setPopups((prevPopups) =>
-              prevPopups.filter((msg) => msg !== popupMessage)
-            )
-          }
+          message={popup.message}
+          onClose={() => {}}
+          index={index}
+          countPre={popup.countPre}
+          countPost={popup.countPost}
+          countTotal={popup.countTotal}
         />
       ))}
       <Grid
