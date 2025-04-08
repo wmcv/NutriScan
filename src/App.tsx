@@ -72,9 +72,7 @@ function App() {
         };
         setproductNutrients(nutrients);
 
-        const isGlutenFree =
-          product.ingredients_analysis_tags?.includes("en:gluten-free") ||
-          false;
+        const isGlutenFree = product.labels || "NOT RIGHT";
         console.log(isGlutenFree);
         const preferences = await getUserPreferences();
         //console.log(preferences);
