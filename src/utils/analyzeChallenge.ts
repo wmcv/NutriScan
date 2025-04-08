@@ -1,5 +1,3 @@
-import { supabase } from "../supabaseClient";
-
 async function handleChallengeSuccess(challengeKey: string, challengeAmount: number, updatedChallengeProgress: number[]): Promise<[number, number]> {
     console.log(`Success for ${challengeKey} with out of ${challengeAmount}`);
 
