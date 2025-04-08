@@ -258,6 +258,7 @@ function App() {
         }
       }
     };
+    getInfo();
   }, [barcode]);
 
   useEffect(() => {
