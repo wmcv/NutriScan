@@ -214,6 +214,9 @@ function App() {
             }
 
             if (weeklyChallengesUsers?.length) {
+              console.log("temp check");
+              console.log(weeklyChallengesUsers);
+              console.log("temp check");
               const userChallengesTemp = [
                 weeklyChallengesUsers[0].challenge1,
                 weeklyChallengesUsers[0].challenge2,
