@@ -260,7 +260,7 @@ function App() {
       }
     };
     getInfo();
-    setLoadChallenge(true);
+    setLoadChallenge(!loadChallenge);
   }, [barcode]);
 
   useEffect(() => {
@@ -296,7 +296,6 @@ function App() {
         );
       });
     }
-    setLoadChallenge(false);
   }, [loadChallenge]);
 
   return (
