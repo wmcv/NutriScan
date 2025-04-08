@@ -124,6 +124,34 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const challengeList: { [key: number]: string } = {
+      "0": "challenge1",
+      "1": "challenge2",
+      "2": "challenge3",
+      "3": "challenge4",
+      "4": "challenge5",
+    };
+
+    weeklyChallenges.map((challenge, index) => {
+      const [challenge_amount] = challenge.name.split("#");
+      const challengeAmount = parseFloat(challenge_amount);
+
+      analyzeChallenge(
+        challenge.criteria,
+        challenge.value,
+        challengeList[index],
+        challengeAmount,
+        userChallenges,
+        userCompleted,
+        setUserChallenges,
+        setUserCompleted,
+        productNutrients || {},
+        productUnits || {}
+      );
+    });
+  }, []);
+
+  useEffect(() => {
     const getInfo = async () => {
       if (barcode && barcode !== "empty") {
         const product = await fetchProduct(barcode);
@@ -224,7 +252,7 @@ function App() {
                 weeklyChallengesUsers[0]["challenge4"],
                 weeklyChallengesUsers[0]["challenge5"],
               ];
-
+              console.log(userChallengesTemp);
               const completedStatus = weeklyChallengesUsers[0].completed;
 
               setUserChallenges(userChallengesTemp);
@@ -238,31 +266,6 @@ function App() {
         console.log(userChallenges);
         console.log(userCompleted);
         console.log("check");
-        const challengeList: { [key: number]: string } = {
-          "0": "challenge1",
-          "1": "challenge2",
-          "2": "challenge3",
-          "3": "challenge4",
-          "4": "challenge5",
-        };
-
-        weeklyChallenges.map((challenge, index) => {
-          const [challenge_amount] = challenge.name.split("#");
-          const challengeAmount = parseFloat(challenge_amount);
-
-          analyzeChallenge(
-            challenge.criteria,
-            challenge.value,
-            challengeList[index],
-            challengeAmount,
-            userChallenges,
-            userCompleted,
-            setUserChallenges,
-            setUserCompleted,
-            nutrients,
-            units
-          );
-        });
 
         //analyzeChallenge(
         // nutrientName:
