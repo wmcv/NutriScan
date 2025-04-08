@@ -65,7 +65,7 @@ function App() {
           fiber: nutriments.fiber || 0,
           proteins: nutriments.proteins || 0,
           potassium: nutriments.potassium || 0,
-          vitamin_d: nutriments["vitamin-d"] || 0,
+          vitamin_d: nutriments["vitamin-d"] || nutriments["vitamin_d"] || 0,
           salt: nutriments.salt || 0,
           sodium: nutriments.sodium || 0,
           iron: nutriments.iron || 0,
