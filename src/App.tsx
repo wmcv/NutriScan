@@ -233,7 +233,7 @@ function App() {
           }
         };
 
-        fetchUserData();
+        await fetchUserData();
         console.log("check");
         console.log(userChallenges);
         console.log(userCompleted);
