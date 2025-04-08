@@ -225,6 +225,10 @@ function App() {
               const userChallengeList = userChallengesTemp;
               setUserCompleted(completedStatus);
               setUserChallenges(userChallengeList);
+              console.log("oh well 1");
+              console.log(completedStatus);
+              console.log(userChallengeList);
+              console.log("oh well 2");
             }
           }
         };

@@ -32,6 +32,10 @@ async function handleChallengeSuccess(challengeKey: string, challengeAmount: num
       data.completed || 0,
     ];
 
+    console.log('you see')
+    console.log(updatedChallengeProgress)
+    console.log('you see2')
+
     if (challengeKey === 'challenge1'){
         if (updatedChallengeProgress[0] > challengeAmount) {
         } else {
