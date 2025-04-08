@@ -11,6 +11,7 @@ import AIInfo from "./components/AIInfo";
 import WeekChallenges from "./components/WeekChallenges";
 import { supabase } from "./supabaseClient";
 import { Challenge } from "./types";
+import { analyzeChallenge } from "./utils/analyzeChallenge";
 
 function App() {
   const [weeklyChallenges, setWeeklyChallenges] = useState<Challenge[]>([]);
@@ -71,47 +72,7 @@ function App() {
       }
     };
 
-    const fetchUserData = async () => {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-
-      if (user && !error) {
-        const userId = user.id;
-
-        const { data: weeklyChallengesUsers, error: weeklyChallengesError } =
-          await supabase
-            .from("WeeklyChallengesUsers")
-            .select(
-              "challenge1, challenge2, challenge3, challenge4, challenge5, completed"
-            )
-            .eq("user_id", userId);
-
-        if (weeklyChallengesError) {
-          console.error(weeklyChallengesError);
-          return;
-        }
-
-        if (weeklyChallengesUsers?.length) {
-          const userChallenges = [
-            weeklyChallengesUsers[0].challenge1,
-            weeklyChallengesUsers[0].challenge2,
-            weeklyChallengesUsers[0].challenge3,
-            weeklyChallengesUsers[0].challenge4,
-            weeklyChallengesUsers[0].challenge5,
-          ];
-
-          const completedStatus = weeklyChallengesUsers[0].completed;
-
-          setUserChallenges(userChallenges);
-          setUserCompleted(completedStatus);
-        }
-      }
-    };
-
     loadWeeklyChallenges();
-    fetchUserData();
   }, []);
 
   useEffect(() => {
@@ -170,7 +131,6 @@ function App() {
           iron: nutriments["iron_unit"] || "g",
           calcium: nutriments["calcium_unit"] || "g",
         };
-        console.log(units);
         setproductUnits(units);
         setproductNutrients(nutrients);
 
@@ -181,9 +141,86 @@ function App() {
           false;
         setGlutenFree(isGlutenFree);
         console.log(glutenFree);
-        console.log(product.nutriments["fiber_unit"]);
-        console.log(product.nutriments.vitamin_d);
-        console.log(product.nutriments);
+        const fetchUserData = async () => {
+          const {
+            data: { user },
+            error,
+          } = await supabase.auth.getUser();
+
+          if (user && !error) {
+            const userId = user.id;
+
+            const {
+              data: weeklyChallengesUsers,
+              error: weeklyChallengesError,
+            } = await supabase
+              .from("WeeklyChallengesUsers")
+              .select(
+                "challenge1, challenge2, challenge3, challenge4, challenge5, completed"
+              )
+              .eq("user_id", userId);
+
+            if (weeklyChallengesError) {
+              console.error(weeklyChallengesError);
+              return;
+            }
+
+            if (weeklyChallengesUsers?.length) {
+              const userChallenges = [
+                weeklyChallengesUsers[0].challenge1,
+                weeklyChallengesUsers[0].challenge2,
+                weeklyChallengesUsers[0].challenge3,
+                weeklyChallengesUsers[0].challenge4,
+                weeklyChallengesUsers[0].challenge5,
+              ];
+
+              const completedStatus = weeklyChallengesUsers[0].completed;
+
+              setUserChallenges(userChallenges);
+              setUserCompleted(completedStatus);
+            }
+          }
+        };
+
+        fetchUserData();
+
+        const challengeList: { [key: number]: string } = {
+          "0": "challenge1",
+          "1": "challenge2",
+          "2": "challenge3",
+          "3": "challenge4",
+          "4": "challenge5",
+        };
+
+        weeklyChallenges.map((challenge, index) => {
+          const [challenge_amount] = challenge.name.split("#");
+          const challengeAmount = parseFloat(challenge_amount);
+
+          analyzeChallenge(
+            challenge.criteria,
+            challenge.value,
+            challengeList[index],
+            challengeAmount,
+            userChallenges,
+            userCompleted,
+            setUserChallenges,
+            setUserCompleted,
+            nutrients,
+            units
+          );
+        });
+
+        //analyzeChallenge(
+        // nutrientName:
+        //challenge: string,
+        //challengeKey: string,
+        //challengeAmount: number,
+        //challengeProgress: number[],
+        //challengeComplete: number,
+        //setUserChallenges,
+        //nutrients,
+        //units
+        //)
 
         const preferences = await getUserPreferences();
         //console.log(preferences);

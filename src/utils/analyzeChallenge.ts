@@ -1,6 +1,6 @@
-import { supabase } from "@/supabaseClient";
+import { supabase } from "../supabaseClient";
 
-function handleChallengeSuccess(challengeKey: string, challengeComplete: number, challengeProgress: number[], setUserChallenge: React.Dispatch<React.SetStateAction<number[]>>, challengeAmount: number) {
+function handleChallengeSuccess(challengeKey: string, challengeComplete: number, challengeProgress: number[], setUserCompleted: React.Dispatch<React.SetStateAction<number>>, setUserChallenge: React.Dispatch<React.SetStateAction<number[]>>, challengeAmount: number) {
     console.log(`Success for ${challengeKey} with out of ${challengeAmount}`);
     const updatedChallengeProgress = [...challengeProgress];
     updatedChallengeProgress[5] = challengeComplete
@@ -113,6 +113,7 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
     challengeProgress: number[],
     challengeComplete: number,
     setUserChallenge: React.Dispatch<React.SetStateAction<number[]>>,
+    setUserCompleted: React.Dispatch<React.SetStateAction<number>>,
     nutrients: { [key: string]: number },
     units: { [key: string]: string } 
   ) {
@@ -139,7 +140,7 @@ function handleChallengeSuccess(challengeKey: string, challengeComplete: number,
     }
   
     if (challengeSatisfied) {
-      handleChallengeSuccess(challengeKey, challengeComplete, challengeProgress, setUserChallenge, challengeAmount);
+      handleChallengeSuccess(challengeKey, challengeComplete, challengeProgress, setUserCompleted, setUserChallenge, challengeAmount);
     } else {
       //console.log(`Challenge for ${nutrientName} not satisfied. Current value: ${targetValue}`);
     }

@@ -17,7 +17,7 @@ export type Challenge = {
     id?: string | number;
     name: string;
     criteria: string;
-    value: string | number;
+    value: string;
   };
 
 export interface Product {
