@@ -132,6 +132,12 @@ function App() {
       "4": "challenge5",
     };
 
+    console.log("************");
+    console.log(productNutrients);
+    console.log(productUnits);
+    console.log(userChallenges);
+    console.log(userCompleted);
+
     weeklyChallenges.map((challenge, index) => {
       const [challenge_amount] = challenge.name.split("#");
       const challengeAmount = parseFloat(challenge_amount);
