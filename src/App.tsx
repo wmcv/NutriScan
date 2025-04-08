@@ -258,7 +258,9 @@ function App() {
         }
       }
     };
+  }, [barcode]);
 
+  useEffect(() => {
     const challengeList: { [key: number]: string } = {
       "0": "challenge1",
       "1": "challenge2",
@@ -266,26 +268,32 @@ function App() {
       "3": "challenge4",
       "4": "challenge5",
     };
-    getInfo();
 
-    weeklyChallenges.map((challenge, index) => {
-      const [challenge_amount] = challenge.name.split("#");
-      const challengeAmount = parseFloat(challenge_amount);
-      console.log("working ${index}");
-      analyzeChallenge(
-        challenge.criteria,
-        challenge.value,
-        challengeList[index],
-        challengeAmount,
-        userChallenges,
-        userCompleted,
-        setUserChallenges,
-        setUserCompleted,
-        productNutrients || {},
-        productUnits || {}
-      );
-    });
-  }, [barcode]);
+    if (
+      productNutrients &&
+      productUnits &&
+      userChallenges.length &&
+      weeklyChallenges.length
+    ) {
+      weeklyChallenges.map((challenge, index) => {
+        const [challenge_amount] = challenge.name.split("#");
+        const challengeAmount = parseFloat(challenge_amount);
+        analyzeChallenge(
+          challenge.criteria,
+          challenge.value,
+          challengeList[index],
+          challengeAmount,
+          userChallenges,
+          userCompleted,
+          setUserChallenges,
+          setUserCompleted,
+          productNutrients,
+          productUnits
+        );
+      });
+    }
+  }, [productNutrients, productUnits]);
+
   return (
     <Grid
       templateAreas={`"nav" "cam" "divider1" "AI" "divider2" "info" "temp"`}
