@@ -189,9 +189,7 @@ function App() {
         setGlutenFree(isGlutenFree);
         console.log(glutenFree);
 
-        const fetchUserData = async (
-          callback: (userChallenges: number[], userCompleted: number) => void
-        ) => {
+        const fetchUserData = async () => {
           const {
             data: { user },
             error,
@@ -224,43 +222,14 @@ function App() {
                 weeklyChallengesUsers[0]["challenge5"],
               ];
               const completedStatus = weeklyChallengesUsers[0].completed;
-
-              // Use the callback to pass data to analyzeChallenge
-              callback(userChallengesTemp, completedStatus);
+              const userChallengeList = userChallengesTemp;
+              setUserCompleted(completedStatus);
+              setUserChallenges(userChallengeList);
             }
           }
         };
 
-        fetchUserData((userChallengesTemp, userCompletedStatus) => {
-          console.log(userChallengesTemp);
-          console.log(userCompletedStatus);
-
-          const challengeList: { [key: number]: string } = {
-            "0": "challenge1",
-            "1": "challenge2",
-            "2": "challenge3",
-            "3": "challenge4",
-            "4": "challenge5",
-          };
-
-          weeklyChallenges.map((challenge, index) => {
-            const [challenge_amount] = challenge.name.split("#");
-            const challengeAmount = parseFloat(challenge_amount);
-            console.log("working ${index}");
-            analyzeChallenge(
-              challenge.criteria,
-              challenge.value,
-              challengeList[index],
-              challengeAmount,
-              userChallengesTemp,
-              userCompletedStatus,
-              setUserChallenges,
-              setUserCompleted,
-              nutrients,
-              units
-            );
-          });
-        });
+        await fetchUserData();
 
         //analyzeChallenge(
         // nutrientName:
@@ -290,7 +259,32 @@ function App() {
       }
     };
 
+    const challengeList: { [key: number]: string } = {
+      "0": "challenge1",
+      "1": "challenge2",
+      "2": "challenge3",
+      "3": "challenge4",
+      "4": "challenge5",
+    };
     getInfo();
+
+    weeklyChallenges.map((challenge, index) => {
+      const [challenge_amount] = challenge.name.split("#");
+      const challengeAmount = parseFloat(challenge_amount);
+      console.log("working ${index}");
+      analyzeChallenge(
+        challenge.criteria,
+        challenge.value,
+        challengeList[index],
+        challengeAmount,
+        userChallenges,
+        userCompleted,
+        setUserChallenges,
+        setUserCompleted,
+        productNutrients || {},
+        productUnits || {}
+      );
+    });
   }, [barcode]);
   return (
     <Grid
