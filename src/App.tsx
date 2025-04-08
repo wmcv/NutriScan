@@ -26,10 +26,6 @@ function App() {
     }, 3000); // 3 seconds
   };
 
-  const removePopup = (index: number) => {
-    setPopups((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const [weeklyChallenges, setWeeklyChallenges] = useState<Challenge[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [barcode, setBarcode] = useState("empty");
@@ -367,7 +363,11 @@ function App() {
         <TempPopup
           key={index}
           message={popupMessage}
-          onClose={() => removePopup(index)}
+          onClose={() =>
+            setPopups((prevPopups) =>
+              prevPopups.filter((msg) => msg !== popupMessage)
+            )
+          }
         />
       ))}
       <Grid
