@@ -12,8 +12,24 @@ import WeekChallenges from "./components/WeekChallenges";
 import { supabase } from "./supabaseClient";
 import { Challenge } from "./types";
 import { analyzeChallenge } from "./utils/analyzeChallenge";
+import TempPopup from "./components/TempPopup";
 
 function App() {
+  const [popups, setPopups] = useState<string[]>([]);
+
+  const showTempPopup = (message: string) => {
+    setPopups((prev) => [...prev, message]);
+
+    // Set a timeout to remove the popup after 3 seconds
+    setTimeout(() => {
+      setPopups((prev) => prev.filter((_, i) => i !== 0)); // Remove the first popup
+    }, 3000); // 3 seconds
+  };
+
+  const removePopup = (index: number) => {
+    setPopups((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const [weeklyChallenges, setWeeklyChallenges] = useState<Challenge[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [barcode, setBarcode] = useState("empty");
@@ -313,6 +329,9 @@ function App() {
           );
         };
 
+        //copyChallengeProgress;
+        showTempPopup("copyChallengeProgress");
+
         updateDatabase();
 
         //
@@ -341,42 +360,54 @@ function App() {
   }, [barcode]);
 
   return (
-    <Grid
-      templateAreas={`"nav" "cam" "divider1" "AI" "divider2" "info" "temp"`}
-    >
-      <GridItem area="nav">
-        <NavBar toggleSettings={setSettingsOpen} settingsOpen={settingsOpen} />
-        {settingsOpen && <MenuFrame setMenuOpen={setSettingsOpen} />}
-      </GridItem>
-      <GridItem area="cam">
-        <CameraFeed updateBarcode={setBarcode} />
-      </GridItem>
-      <GridItem area="divider1">
-        <Divider borderColor="gray.300" my={2} />
-      </GridItem>
-      <GridItem area="AI">
-        <AIInfo aiResponse={AIMessage} />
-      </GridItem>
-      <GridItem area="divider2">
-        <Divider borderColor="gray.300" my={2} />
-      </GridItem>
-      <GridItem area="info">
-        <ProductInfo
-          productName={productName}
-          servingSize={servingSize}
-          productIngredients={productIngredients}
-          productNutrients={productNutrients || {}}
-          productUnits={productUnits || {}}
+    <div>
+      {popups.map((popupMessage, index) => (
+        <TempPopup
+          key={index}
+          message={popupMessage}
+          onClose={() => removePopup(index)}
         />
-      </GridItem>
-      <GridItem area="temp">
-        {userCompleted}
-        <WeekChallenges
-          userChallenge={userChallenges}
-          challenges={weeklyChallenges}
-        ></WeekChallenges>
-      </GridItem>
-    </Grid>
+      ))}
+      <Grid
+        templateAreas={`"nav" "cam" "divider1" "AI" "divider2" "info" "temp"`}
+      >
+        <GridItem area="nav">
+          <NavBar
+            toggleSettings={setSettingsOpen}
+            settingsOpen={settingsOpen}
+          />
+          {settingsOpen && <MenuFrame setMenuOpen={setSettingsOpen} />}
+        </GridItem>
+        <GridItem area="cam">
+          <CameraFeed updateBarcode={setBarcode} />
+        </GridItem>
+        <GridItem area="divider1">
+          <Divider borderColor="gray.300" my={2} />
+        </GridItem>
+        <GridItem area="AI">
+          <AIInfo aiResponse={AIMessage} />
+        </GridItem>
+        <GridItem area="divider2">
+          <Divider borderColor="gray.300" my={2} />
+        </GridItem>
+        <GridItem area="info">
+          <ProductInfo
+            productName={productName}
+            servingSize={servingSize}
+            productIngredients={productIngredients}
+            productNutrients={productNutrients || {}}
+            productUnits={productUnits || {}}
+          />
+        </GridItem>
+        <GridItem area="temp">
+          {userCompleted}
+          <WeekChallenges
+            userChallenge={userChallenges}
+            challenges={weeklyChallenges}
+          ></WeekChallenges>
+        </GridItem>
+      </Grid>
+    </div>
   );
 }
 
