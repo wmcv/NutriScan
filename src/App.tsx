@@ -45,9 +45,7 @@ function App() {
   };
 
   useEffect(() => {
-    showTempPopup("This 1!", 0, 0, 0);
-    showTempPopup("This 2!", 0, 0, 0);
-    showTempPopup("This 3!", 0, 0, 0);
+    showTempPopup("Scan 5 high-saturated fat items", 4, 5, 5);
   }, []);
 
   const [weeklyChallenges, setWeeklyChallenges] = useState<Challenge[]>([]);
@@ -433,13 +431,6 @@ function App() {
         };
 
         getWeeklyChallenges();
-
-        //copyChallengeProgress;
-        showTempPopup("This 1!", 0, 0, 0);
-
-        //showTempPopup("copyChallengeProgress");
-        //showTempPopup("3333");
-        //showTempPopup("94852709572");
         updateDatabase();
 
         //
