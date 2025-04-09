@@ -163,7 +163,7 @@ const UserProfileTable: React.FC<UserProfileTableProps> = ({
         <Text fontFamily="Lucida Console">
           Badges Earned:{" "}
           <Text as="span" fontWeight="bold">
-            {userProfileBadges.length}
+            {userProfileBadges.filter((badge) => badge !== null).length}
           </Text>
         </Text>
         <Text fontFamily="Lucida Console">

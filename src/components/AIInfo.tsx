@@ -16,7 +16,6 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ aiResponse }) => {
   const [ratingPart, ...responseParts] = aiResponse.split("#");
   const rating = parseInt(ratingPart, 10);
   const explanation = responseParts.join("#").trim();
-
   return (
     <Box p={6} bg="white" borderRadius="md" boxShadow="md">
       <Flex align="center" mb={4}>
@@ -47,6 +46,7 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ aiResponse }) => {
 
         <Text fontFamily="Tahoma" fontSize="xl" fontWeight="bold" ml={4}>
           AI Rating
+          {aiResponse}
         </Text>
       </Flex>
 
