@@ -140,6 +140,7 @@ const MenuFrame: React.FC<NavBarProps> = ({ setMenuOpen }) => {
         overflowY="auto"
       >
         <Flex justify="space-between" align="center" mb={4}>
+          <Box mr={5} />
           <Text
             fontFamily="Vagabondfed"
             fontSize="lg"

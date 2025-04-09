@@ -8,11 +8,12 @@ import ProductInfo from "./components/ProductInfo";
 import { analyzeProduct } from "./utils/analyzeProduct";
 import { getUserPreferences } from "./utils/getUserPreferences";
 import AIInfo from "./components/AIInfo";
-import WeekChallenges from "./components/WeekChallenges";
 import { supabase } from "./supabaseClient";
 import { Challenge } from "./types";
 import { analyzeChallenge } from "./utils/analyzeChallenge";
 import TempPopup from "./components/TempPopup";
+import ProfileFrame from "./components/ProfileFrame";
+import BadgePopup from "./components/BadgePopup";
 
 function App() {
   const [popupMessages, setPopupMessages] = useState<
@@ -30,26 +31,35 @@ function App() {
     countPost: number,
     countTotal: number
   ) => {
-    const index = popupMessages.length; // Use the length of the array as an index
+    const index = popupMessages.length;
     setPopupMessages((prevMessages) => [
       ...prevMessages,
       { message, index, countPre, countPost, countTotal },
     ]);
 
-    // Set a timeout to remove the popup after the specified duration
     setTimeout(() => {
       setPopupMessages((prevMessages) =>
         prevMessages.filter((popup) => popup.message !== message)
       );
-    }, 3000); // Use duration or default to 3000
+    }, 3000);
   };
 
-  //useEffect(() => {
-  // showTempPopup("Scan 5 high-saturated fat items", 4, 5, 5);
-  //}, []);
+  const [popupBadges, setPopupBadges] = useState<{ id: number }[]>([]);
+
+  const showBadgePopup = (id: number) => {
+    const index = popupMessages.length + popupBadges.length;
+    setPopupBadges((prevBadges) => [...prevBadges, { id, index }]);
+
+    setTimeout(() => {
+      setPopupBadges((prevBadges) =>
+        prevBadges.filter((popup) => popup.id !== id)
+      );
+    }, 3000);
+  };
 
   const [weeklyChallenges, setWeeklyChallenges] = useState<Challenge[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [barcode, setBarcode] = useState("empty");
   const [AIMessage, setAIMessage] = useState("empty");
   const [productName, setProductName] = useState("Product");
@@ -59,6 +69,8 @@ function App() {
   const [foodGroups, setFoodGroups] = useState("NaN");
   const [userChallenges, setUserChallenges] = useState<number[]>([]);
   const [userCompleted, setUserCompleted] = useState<number>(0);
+  const [userProfileScans, setUserProfileScans] = useState<number>(0);
+  const [userProfileBadges, setUserProfileBadges] = useState<number[]>([0]);
   const [productNutrients, setproductNutrients] = useState<{
     energy_kcal: number;
     fat: number;
@@ -152,6 +164,47 @@ function App() {
       }
     };
 
+    const checkAndCreateProfile = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (user && !error) {
+        const userId = user.id;
+
+        const { data, error: checkError } = await supabase
+          .from("Profiles")
+          .select("*")
+          .eq("user_id", userId)
+          .single();
+
+        console.log(data);
+        if (checkError && checkError.code === "PGRST116") {
+          const { error: insertError } = await supabase.from("Profiles").upsert(
+            [
+              {
+                user_id: userId,
+                scan_count: 0,
+                badges: [0],
+              },
+            ],
+            { onConflict: "user_id" }
+          );
+
+          if (insertError) {
+            console.error("Error creating new row for user:", insertError);
+          } else {
+            console.log("New row created for user:", userId);
+          }
+        } else if (checkError) {
+          console.error("Error checking for existing user row:", checkError);
+        } else {
+          console.log("User already has a row in Profiles");
+        }
+      }
+    };
+
     const loadChallengeData = async () => {
       const {
         data: { user },
@@ -188,10 +241,150 @@ function App() {
       setUserCompleted(loadChallengeComplete);
     };
 
+    const loadProfileData = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+      if (!user || error) return;
+
+      const userId = user.id;
+
+      const { data, error: fetchError } = await supabase
+        .from("Profiles")
+        .select("scan_count, badges")
+        .eq("user_id", userId)
+        .single();
+
+      if (fetchError || !data) {
+        console.error("Failed to fetch profile data", fetchError);
+        return;
+      }
+
+      const loadProfileScans = data.scan_count || 0;
+      const loadProfileBadges = data.badges || [0];
+
+      setUserProfileScans(loadProfileScans);
+      setUserProfileBadges(loadProfileBadges);
+    };
+
     loadWeeklyChallenges();
     checkAndCreateUserChallenges();
+    checkAndCreateProfile();
     loadChallengeData();
+    loadProfileData();
   }, []);
+
+  useEffect(() => {
+    setUserProfileScans(userProfileScans + 1);
+    const scans = userProfileScans + 1;
+    const badges = userProfileBadges;
+    const challengeCount = userCompleted;
+    const orderChange = [0];
+
+    if (!badges.includes(1) && scans >= 1) {
+      badges[1] = 1;
+      orderChange[0] = 1;
+      showBadgePopup(1);
+    } else if (!badges.includes(2) && scans >= 5) {
+      badges[2] = 2;
+      orderChange[0] = 1;
+      showBadgePopup(2);
+    } else if (!badges.includes(3) && scans >= 10) {
+      badges[3] = 3;
+      orderChange[0] = 1;
+      showBadgePopup(3);
+    } else if (!badges.includes(4) && scans >= 25) {
+      badges[4] = 4;
+      orderChange[0] = 1;
+      showBadgePopup(4);
+    } else if (!badges.includes(5) && scans >= 50) {
+      badges[5] = 5;
+      orderChange[0] = 1;
+      showBadgePopup(5);
+    } else if (!badges.includes(6) && scans >= 75) {
+      badges[6] = 6;
+      orderChange[0] = 1;
+      showBadgePopup(6);
+    } else if (!badges.includes(7) && scans >= 100) {
+      badges[7] = 7;
+      orderChange[0] = 1;
+      showBadgePopup(7);
+    } else if (!badges.includes(8) && scans >= 150) {
+      badges[8] = 8;
+      orderChange[0] = 1;
+      showBadgePopup(8);
+    } else if (!badges.includes(9) && scans >= 200) {
+      badges[9] = 9;
+      orderChange[0] = 1;
+      showBadgePopup(9);
+    } else if (!badges.includes(10) && scans >= 250) {
+      badges[10] = 10;
+      orderChange[0] = 1;
+      showBadgePopup(10);
+    } else if (!badges.includes(11) && scans >= 500) {
+      badges[11] = 11;
+      orderChange[0] = 1;
+      showBadgePopup(11);
+    } else if (!badges.includes(12) && scans >= 1000) {
+      badges[12] = 12;
+      orderChange[0] = 1;
+      showBadgePopup(12);
+    } else if (!badges.includes(13) && challengeCount >= 1) {
+      badges[13] = 13;
+      orderChange[0] = 1;
+      showBadgePopup(13);
+    } else if (!badges.includes(14) && challengeCount >= 3) {
+      badges[14] = 14;
+      orderChange[0] = 1;
+      showBadgePopup(14);
+    } else if (!badges.includes(15) && challengeCount >= 5) {
+      badges[15] = 15;
+      orderChange[0] = 1;
+      showBadgePopup(15);
+    } else if (!badges.includes(16) && challengeCount >= 10) {
+      badges[16] = 16;
+      orderChange[0] = 1;
+      showBadgePopup(16);
+    } else if (!badges.includes(17) && challengeCount >= 15) {
+      badges[17] = 17;
+      orderChange[0] = 1;
+      showBadgePopup(17);
+    } else if (!badges.includes(18) && challengeCount >= 25) {
+      badges[18] = 18;
+      orderChange[0] = 1;
+      showBadgePopup(18);
+    } else if (!badges.includes(19) && challengeCount >= 50) {
+      badges[19] = 19;
+      orderChange[0] = 1;
+      showBadgePopup(19);
+    }
+
+    if (orderChange[0] === 1) {
+      const updateProfile = async () => {
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.getUser();
+        if (!user || error) return;
+
+        const userId = user.id;
+        await supabase.from("Profiles").upsert(
+          [
+            {
+              user_id: userId,
+              scan_count: scans || 0,
+              badges: badges || [0],
+            },
+          ],
+          { onConflict: "user_id" }
+        );
+      };
+      updateProfile();
+    }
+    setUserProfileScans(scans);
+    setUserProfileBadges(badges);
+  }, [barcode]);
 
   useEffect(() => {
     const getInfo = async () => {
@@ -352,85 +545,94 @@ function App() {
           );
         };
 
-        //copiedUpdatedChallengeProgress    og
-        //copyChallengeProgress     new
-        const getWeeklyChallenges = async () => {
-          const { data, error } = await supabase
-            .from("WeeklyChallenges")
-            .select("*");
-          if (error) {
-            console.error("Error fetching weekly challenges:", error);
-          } else {
-            if (
-              copyChallengeProgress[0] - copiedUpdatedChallengeProgress[0] ===
-              1
-            ) {
-              const chalName = data[0].name;
-              const [strTotalCount, filteredName] = chalName.split("#");
-              const totalCount = parseFloat(strTotalCount);
-              showTempPopup(
-                filteredName,
-                copiedUpdatedChallengeProgress[0],
-                copyChallengeProgress[0],
-                totalCount
-              );
-            } else if (
-              copyChallengeProgress[1] - copiedUpdatedChallengeProgress[1] ===
-              1
-            ) {
-              const chalName = data[1].name;
-              const [strTotalCount, filteredName] = chalName.split("#");
-              const totalCount = parseFloat(strTotalCount);
-              showTempPopup(
-                filteredName,
-                copiedUpdatedChallengeProgress[1],
-                copyChallengeProgress[1],
-                totalCount
-              );
-            } else if (
-              copyChallengeProgress[2] - copiedUpdatedChallengeProgress[2] ===
-              1
-            ) {
-              const chalName = data[2].name;
-              const [strTotalCount, filteredName] = chalName.split("#");
-              const totalCount = parseFloat(strTotalCount);
-              showTempPopup(
-                filteredName,
-                copiedUpdatedChallengeProgress[2],
-                copyChallengeProgress[2],
-                totalCount
-              );
-            } else if (
-              copyChallengeProgress[3] - copiedUpdatedChallengeProgress[3] ===
-              1
-            ) {
-              const chalName = data[3].name;
-              const [strTotalCount, filteredName] = chalName.split("#");
-              const totalCount = parseFloat(strTotalCount);
-              showTempPopup(
-                filteredName,
-                copiedUpdatedChallengeProgress[3],
-                copyChallengeProgress[3],
-                totalCount
-              );
-            } else if (
-              copyChallengeProgress[4] - copiedUpdatedChallengeProgress[4] ===
-              1
-            ) {
-              const chalName = data[4].name;
-              const [strTotalCount, filteredName] = chalName.split("#");
-              const totalCount = parseFloat(strTotalCount);
-              showTempPopup(
-                filteredName,
-                copiedUpdatedChallengeProgress[4],
-                copyChallengeProgress[4],
-                totalCount
-              );
-            }
-          }
-        };
+        const updateProfile = async () => {
+          const {
+            data: { user },
+            error,
+          } = await supabase.auth.getUser();
+          if (!user || error) return;
 
-        getWeeklyChallenges();
+          const userId = user.id;
+          await supabase.from("Profiles").upsert(
+            [
+              {
+                user_id: userId,
+                scan_count: userProfileScans || 0,
+                badges: userProfileBadges || [0],
+              },
+            ],
+            { onConflict: "user_id" }
+          );
+        };
+        updateProfile();
+
+        if (
+          copyChallengeProgress[0] - copiedUpdatedChallengeProgress[0] ===
+          1
+        ) {
+          const chalName = weeklyChallenges[0].name;
+          const [strTotalCount, filteredName] = chalName.split("#");
+          const totalCount = parseFloat(strTotalCount);
+          showTempPopup(
+            filteredName,
+            copiedUpdatedChallengeProgress[0],
+            copyChallengeProgress[0],
+            totalCount
+          );
+        } else if (
+          copyChallengeProgress[1] - copiedUpdatedChallengeProgress[1] ===
+          1
+        ) {
+          const chalName = weeklyChallenges[1].name;
+          const [strTotalCount, filteredName] = chalName.split("#");
+          const totalCount = parseFloat(strTotalCount);
+          showTempPopup(
+            filteredName,
+            copiedUpdatedChallengeProgress[1],
+            copyChallengeProgress[1],
+            totalCount
+          );
+        } else if (
+          copyChallengeProgress[2] - copiedUpdatedChallengeProgress[2] ===
+          1
+        ) {
+          const chalName = weeklyChallenges[2].name;
+          const [strTotalCount, filteredName] = chalName.split("#");
+          const totalCount = parseFloat(strTotalCount);
+          showTempPopup(
+            filteredName,
+            copiedUpdatedChallengeProgress[2],
+            copyChallengeProgress[2],
+            totalCount
+          );
+        } else if (
+          copyChallengeProgress[3] - copiedUpdatedChallengeProgress[3] ===
+          1
+        ) {
+          const chalName = weeklyChallenges[3].name;
+          const [strTotalCount, filteredName] = chalName.split("#");
+          const totalCount = parseFloat(strTotalCount);
+          showTempPopup(
+            filteredName,
+            copiedUpdatedChallengeProgress[3],
+            copyChallengeProgress[3],
+            totalCount
+          );
+        } else if (
+          copyChallengeProgress[4] - copiedUpdatedChallengeProgress[4] ===
+          1
+        ) {
+          const chalName = weeklyChallenges[4].name;
+          const [strTotalCount, filteredName] = chalName.split("#");
+          const totalCount = parseFloat(strTotalCount);
+          showTempPopup(
+            filteredName,
+            copiedUpdatedChallengeProgress[4],
+            copyChallengeProgress[4],
+            totalCount
+          );
+        }
+
         updateDatabase();
 
         //
@@ -457,9 +659,17 @@ function App() {
     };
     getInfo();
   }, [barcode]);
-
   return (
     <div>
+      {popupBadges.map((popup, index) => (
+        <BadgePopup
+          key={index}
+          id={popup.id}
+          onClose={() => {}}
+          index={index}
+        />
+      ))}
+
       {popupMessages.map((popup, index) => (
         <TempPopup
           key={index}
@@ -471,14 +681,24 @@ function App() {
           countTotal={popup.countTotal}
         />
       ))}
-      <Grid
-        templateAreas={`"nav" "cam" "divider1" "AI" "divider2" "info" "temp"`}
-      >
+      <Grid templateAreas={`"nav" "cam" "divider1" "AI" "divider2" "info"`}>
         <GridItem area="nav">
           <NavBar
             toggleSettings={setSettingsOpen}
             settingsOpen={settingsOpen}
+            toggleProfile={setProfileOpen}
+            profileOpen={profileOpen}
           />
+          {profileOpen && (
+            <ProfileFrame
+              setProfileOpen={setProfileOpen}
+              userChallenge={userChallenges}
+              userCompleted={userCompleted}
+              challenges={weeklyChallenges}
+              userProfileScans={userProfileScans}
+              userProfileBadges={userProfileBadges}
+            />
+          )}
           {settingsOpen && <MenuFrame setMenuOpen={setSettingsOpen} />}
         </GridItem>
         <GridItem area="cam">
@@ -501,13 +721,6 @@ function App() {
             productNutrients={productNutrients || {}}
             productUnits={productUnits || {}}
           />
-        </GridItem>
-        <GridItem area="temp">
-          {userCompleted}
-          <WeekChallenges
-            userChallenge={userChallenges}
-            challenges={weeklyChallenges}
-          ></WeekChallenges>
         </GridItem>
       </Grid>
     </div>

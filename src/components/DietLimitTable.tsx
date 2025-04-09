@@ -46,7 +46,7 @@ const DietLimitTable: React.FC<NutrientLimitsTableProps> = ({
       Iron: "mg",
       Calcium: "mg",
     };
-    return unitMap[nutrient] || "mg"; // Default to "mg" if not listed
+    return unitMap[nutrient] || "mg";
   };
 
   return (

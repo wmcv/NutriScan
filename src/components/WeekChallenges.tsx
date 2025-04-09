@@ -26,12 +26,16 @@ function WeekChallenges({ userChallenge, challenges }: WeekChallengesProps) {
               WEEKLY CHALLENGES
             </Text>
 
-            <HStack justify="space-between" w="85%" align="center">
+            <HStack justify="space-between" w="90%" align="center">
               <Box flex="1">
                 <Progress
-                  value={
-                    userChallenge.filter((progress) => progress > 0).length
-                  }
+                  value={challenges.reduce((completed, challenge, index) => {
+                    const [countString] = challenge.name.split("#");
+                    const totalCount = parseInt(countString) || 1;
+                    return userChallenge[index] >= totalCount
+                      ? completed + 1
+                      : completed;
+                  }, 0)}
                   max={5}
                   size="lg"
                   colorScheme="teal"
@@ -49,7 +53,13 @@ function WeekChallenges({ userChallenge, challenges }: WeekChallengesProps) {
                 mb={0}
               >
                 {Math.min(
-                  userChallenge.filter((progress) => progress > 0).length,
+                  challenges.reduce((completed, challenge, index) => {
+                    const [countString] = challenge.name.split("#");
+                    const totalCount = parseInt(countString) || 1;
+                    return userChallenge[index] >= totalCount
+                      ? completed + 1
+                      : completed;
+                  }, 0),
                   challenges.length
                 )}
                 /{challenges.length}

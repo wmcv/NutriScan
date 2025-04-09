@@ -62,13 +62,13 @@ const TempPopup: React.FC<TempPopupProps> = ({
         <div>
           <HStack>
             <Circle size="12px" bg="gray.400" />
-            <Text fontWeight="bold" fontSize="md" ml={2}>
+            <Text fontFamily="Tahoma" fontWeight="bold" fontSize="md" ml={2}>
               {message}
             </Text>
 
             <Divider orientation="vertical" height="35px" ml={5} mr={2} />
 
-            <Text fontWeight="bold" mr={2} fontSize="md">
+            <Text fontFamily="Tahoma" fontWeight="bold" mr={2} fontSize="md">
               {showPre ? (
                 `${countPre}/${countTotal}`
               ) : countPost === countTotal ? (
