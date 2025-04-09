@@ -356,28 +356,83 @@ function App() {
 
         //copiedUpdatedChallengeProgress    og
         //copyChallengeProgress     new
-        const loadWeeklyChallenges = async () => {
+        const getWeeklyChallenges = async () => {
           const { data, error } = await supabase
             .from("WeeklyChallenges")
             .select("*");
           if (error) {
             console.error("Error fetching weekly challenges:", error);
           } else {
-            console.log("data");
-            console.log(data);
+            if (
+              copyChallengeProgress[0] - copiedUpdatedChallengeProgress[0] ===
+              1
+            ) {
+              const chalName = data[0].name;
+              const [strTotalCount, filteredName] = chalName.split("#");
+              const totalCount = parseFloat(strTotalCount);
+              showTempPopup(
+                filteredName,
+                copiedUpdatedChallengeProgress[0],
+                copyChallengeProgress[0],
+                totalCount
+              );
+            } else if (
+              copyChallengeProgress[1] - copiedUpdatedChallengeProgress[1] ===
+              1
+            ) {
+              const chalName = data[1].name;
+              const [strTotalCount, filteredName] = chalName.split("#");
+              const totalCount = parseFloat(strTotalCount);
+              showTempPopup(
+                filteredName,
+                copiedUpdatedChallengeProgress[1],
+                copyChallengeProgress[1],
+                totalCount
+              );
+            } else if (
+              copyChallengeProgress[2] - copiedUpdatedChallengeProgress[2] ===
+              1
+            ) {
+              const chalName = data[2].name;
+              const [strTotalCount, filteredName] = chalName.split("#");
+              const totalCount = parseFloat(strTotalCount);
+              showTempPopup(
+                filteredName,
+                copiedUpdatedChallengeProgress[2],
+                copyChallengeProgress[2],
+                totalCount
+              );
+            } else if (
+              copyChallengeProgress[3] - copiedUpdatedChallengeProgress[3] ===
+              1
+            ) {
+              const chalName = data[3].name;
+              const [strTotalCount, filteredName] = chalName.split("#");
+              const totalCount = parseFloat(strTotalCount);
+              showTempPopup(
+                filteredName,
+                copiedUpdatedChallengeProgress[3],
+                copyChallengeProgress[3],
+                totalCount
+              );
+            } else if (
+              copyChallengeProgress[4] - copiedUpdatedChallengeProgress[4] ===
+              1
+            ) {
+              const chalName = data[4].name;
+              const [strTotalCount, filteredName] = chalName.split("#");
+              const totalCount = parseFloat(strTotalCount);
+              showTempPopup(
+                filteredName,
+                copiedUpdatedChallengeProgress[4],
+                copyChallengeProgress[4],
+                totalCount
+              );
+            }
           }
         };
 
-        console.log("loadWeeklyChallenges");
-        console.log(loadWeeklyChallenges);
-        loadWeeklyChallenges();
-
-        if (
-          copyChallengeProgress[0] - copiedUpdatedChallengeProgress[0] ===
-          1
-        ) {
-          showTempPopup("a", 0, 0, 0);
-        }
+        getWeeklyChallenges();
 
         //copyChallengeProgress;
         showTempPopup("This 1!", 0, 0, 0);
