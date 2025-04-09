@@ -186,7 +186,28 @@ function App() {
               {
                 user_id: userId,
                 scan_count: 0,
-                badges: [0],
+                badges: [
+                  0,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null,
+                ],
               },
             ],
             { onConflict: "user_id" }
@@ -263,20 +284,21 @@ function App() {
 
       const loadProfileScans = data.scan_count || 0;
       const loadProfileBadges = data.badges || [0];
-
+      console.log("info");
+      console.log(loadProfileScans);
+      console.log(loadProfileBadges);
       setUserProfileScans(loadProfileScans);
       setUserProfileBadges(loadProfileBadges);
     };
-
+    loadProfileData();
     loadWeeklyChallenges();
     checkAndCreateUserChallenges();
     checkAndCreateProfile();
     loadChallengeData();
-    loadProfileData();
   }, []);
 
   useEffect(() => {
-    setUserProfileScans(userProfileScans + 1);
+    if (barcode === "empty") return;
     const scans = userProfileScans + 1;
     const badges = userProfileBadges;
     const challengeCount = userCompleted;
