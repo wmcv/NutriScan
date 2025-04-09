@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Circle, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import "../popup.css";
 import {
   FaStar,
