@@ -44,9 +44,9 @@ function App() {
     }, 3000); // Use duration or default to 3000
   };
 
-  useEffect(() => {
-    showTempPopup("Scan 5 high-saturated fat items", 4, 5, 5);
-  }, []);
+  //useEffect(() => {
+  // showTempPopup("Scan 5 high-saturated fat items", 4, 5, 5);
+  //}, []);
 
   const [weeklyChallenges, setWeeklyChallenges] = useState<Challenge[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
