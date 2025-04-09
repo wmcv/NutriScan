@@ -21,7 +21,7 @@ const AIAnalysis: React.FC<AIAnalysisProps> = ({ aiResponse }) => {
       <Flex align="center" mb={4}>
         <CircularProgress
           fontFamily="Trebuchet MS"
-          value={(rating / 10) * 100}
+          value={(rating / 10) * 100 || 0}
           size="70px"
           color={
             rating >= 8
