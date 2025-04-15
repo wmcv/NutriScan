@@ -78,7 +78,7 @@
 <img src="github_images/prof_ss.png" width="300"/>
 </div>
 
-## Weekly Challenges
+### Weekly Challenges
 
 <div align="center">
 <img src="github_images/quests_ss.png" width="300"/>
