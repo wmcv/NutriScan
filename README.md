@@ -1,6 +1,6 @@
-NutriScan is a smart food scanner app that lets users scan barcodes on food products and receive AI-powered feedback
+# [Visit NutriScan Web-App](https://nutriscan-webapp.vercel.app/)
 
-[Visit NutriScan Web Application](https://nutriscan-webapp.vercel.app/)
+# NutriScan is a smart food scanner app that lets users scan barcodes on food products and receive AI-powered feedback
 
 
 ## Core Features:
