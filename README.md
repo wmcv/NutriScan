@@ -8,7 +8,7 @@
 - AI-Powered Ratings: Get a custom rating out of 10 and analysis based on your personal health preferences
 - Diet-Based Evaluation: Choose your diet (e.g. Keto, Vegan, Mediterranean) and see if products align
 - Custom Ingredient Alerts: Flag ingredients you’re allergic to or want to avoid — get notified instantly
-- Nutrient Thresholds: Set personalized nutrient rules (e.g. sugar > 20g = warning, protein < 5g = alert)
+- Nutrient Thresholds: Set personalized nutrient rules (e.g. sugar > 20g and/or protein < 5g send warnings)
 - Personal Dashboard: Track your scanning history, nutrition habits, and progress
 - Badges & Weekly Challenges: Earn badges by scanning and completing challenges like “Scan 4 low-sugar items”
 - Auto-Updating Challenges: New challenges are rolled out every week to keep you engaged and motivated
