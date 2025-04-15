@@ -17,6 +17,23 @@
 - Cron jobs to automatically refresh weekly challenges
 - Dotenv for secure management of API keys and environment variables
 
+## Navbar stuff
+<div align="center">
+  <img src="github_images/cam_ss.png" width="300" alt="Navbar & Scanner"/>
+</div>
+
+## Navbar stuff
+<div align="center">
+  <img src="github_images/cam_ss.png" width="300" alt="Navbar & Scanner"/>
+</div>
+## Navbar stuff
+<div align="center">
+  <img src="github_images/cam_ss.png" width="300" alt="Navbar & Scanner"/>
+</div>
+
+
+
+
 # Dashboard View
 ### Navbar & Scanner
 <img src="github_images/cam_ss.png" width="300"/>
