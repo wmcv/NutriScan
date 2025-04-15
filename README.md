@@ -17,24 +17,24 @@
 - Cron jobs to automatically refresh weekly challenges
 - Dotenv for secure management of API keys and environment variables
 
-### Dashboard View
-## Navbar & Scanner
+# Dashboard View
+### Navbar & Scanner
 <img src="github_images/cam_ss.png" width="300"/>
-## AI Rating
+### AI Rating
 <img src="github_images/ai_ss.png" width="300"/>
-## Nutrient Facts
+### Nutrient Facts
 <img src="github_images/nutrifacts_ss.png" width="300"/>
-## Ingredients
+### Ingredients
 <img src="github_images/ingre_ss.png" width="300"/>
-### Dietary Preference View
-## Diet Selection
+# Dietary Preference View
+### Diet Selection
 <img src="github_images/diet_ss.png" width="300"/>
-## Restrictions
+### Restrictions
 <img src="github_images/restr_ss.png" width="300"/>
-## Limitations
+### Limitations
 <img src="github_images/nutri_ss.png" width="300"/>
 ### Profile View
-## Stats & Badges
+### Stats & Badges
 <img src="github_images/prof_ss.png" width="300"/>
 ## Weekly Challenges
 <img src="github_images/quests_ss.png" width="300"/>
