@@ -1,54 +1,18 @@
-# React + TypeScript + Vite
+# NutriScan is a smart food scanner app that lets users scan barcodes on food products and receive AI-powered feedback
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Core Features:
+- Barcode Scanning: Instantly fetch nutritional information by scanning any food product
+- AI-Powered Ratings: Get a custom rating out of 10 and analysis based on your personal health preferences
+- Diet-Based Evaluation: Choose your diet (e.g. Keto, Vegan, Mediterranean) and see if products align
+- Custom Ingredient Alerts: Flag ingredients you’re allergic to or want to avoid — get notified instantly
+- Nutrient Thresholds: Set personalized nutrient rules (e.g. sugar > 20g = warning, protein < 5g = alert)
+- Personal Dashboard: Track your scanning history, nutrition habits, and progress
+- Badges & Weekly Challenges: Earn badges by scanning and completing challenges like “Scan 4 low-sugar items”
+- Auto-Updating Challenges: New challenges are rolled out every week to keep you engaged and motivated
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Tech Highlights:
+- Python Flask backend for handling barcode scan requests and AI responses
+- Supabase as the backend database for user data, nutrition info, and challenge tracking
+- AI integration to provide personalized product analysis and ratings
+- Cron jobs to automatically refresh weekly challenges
+- Dotenv for secure management of API keys and environment variables
