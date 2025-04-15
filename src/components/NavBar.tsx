@@ -1,4 +1,4 @@
-import { HStack, Box, Flex } from "@chakra-ui/react";
+import { HStack, Box, Flex, Text } from "@chakra-ui/react";
 import HamburgerBtn from "./HamburgerBtn";
 import GoogleAuth from "./GoogleAuth";
 import ProfileBtn from "./ProfileBtn";
@@ -18,9 +18,12 @@ const NavBar: React.FC<NavBarProps> = ({
 }) => {
   return (
     <HStack width="100%" justifyContent="space-between">
-      <Flex ml={0} mt={1}>
+      <Flex ml={1} mt={1}>
         <GoogleAuth />
       </Flex>
+      <Text fontFamily="Lucida Console" fontWeight="bold" fontSize={30} ml={12}>
+        NutriScan
+      </Text>
       <Box>
         <HStack>
           <ProfileBtn toggleProfile={() => toggleProfile(!profileOpen)} />

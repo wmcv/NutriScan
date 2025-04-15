@@ -19,8 +19,8 @@ interface UserProfileTableProps {
 const badgeDefinitions = [
   {
     id: 0,
-    label: "Used NutriScan",
-    icon: <FaStar color="purple" size="1.5em" />,
+    label: "NutriScan User",
+    icon: <FaStar color="purple" size="1.2em" />,
     color: "pink",
   },
   {
@@ -149,7 +149,7 @@ const UserProfileTable: React.FC<UserProfileTableProps> = ({
   );
 
   return (
-    <Box>
+    <Box mb={20}>
       <Stack align="center" mb={3} spacing={0}>
         <Text fontFamily="Tahoma" fontSize="xl" fontWeight="bold" mb={0}>
           Profile Statistics
