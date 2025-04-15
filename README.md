@@ -17,10 +17,8 @@
 - Cron jobs to automatically refresh weekly challenges
 - Dotenv for secure management of API keys and environment variables
 
+<h1 align="center">Dashboard View</h1>
 
-
-
-# Dashboard View
 ### Navbar & Scanner
 
 <div align="center">
@@ -45,7 +43,8 @@
 <img src="github_images/ingre_ss.png" width="300"/>
 </div>
   
-# Dietary Preference View
+<h1 align="center">Dietary Preference View</h1>
+
 ### Diet Selection
 
 <div align="center">
@@ -64,7 +63,8 @@
 <img src="github_images/nutri_ss.png" width="300"/>
 </div>
 
-### Profile View
+<h1 align="center">Profile View</h1>
+
 ### Stats & Badges
 
 <div align="center">
