@@ -16,3 +16,13 @@
 - AI integration to provide personalized product analysis and ratings
 - Cron jobs to automatically refresh weekly challenges
 - Dotenv for secure management of API keys and environment variables
+
+![Image 1 description](github_images/ai_ss.png)
+![Image 2 description](github_images/cam_ss.png)
+![Image 3 description](github_images/diet_ss.png)
+![Image 2 description](github_images/ingre_ss.png)
+![Image 3 description](github_images/nutri_ss.png)
+![Image 2 description](github_images/nutrifacts_ss.png)
+![Image 3 description](github_images/prof_ss.png)
+![Image 2 description](github_images/quests_ss.png)
+![Image 3 description](github_images/restr_ss.png)
