@@ -17,12 +17,33 @@
 - Cron jobs to automatically refresh weekly challenges
 - Dotenv for secure management of API keys and environment variables
 
-<img src="github_images/ai_ss.png" width="300"/>
+### Dashboard View
+## Navbar & Scanner
 <img src="github_images/cam_ss.png" width="300"/>
-<img src="github_images/diet_ss.png" width="300"/>
-<img src="github_images/ingre_ss.png" width="300"/>
-<img src="github_images/nutri_ss.png" width="300"/>
+## AI Rating
+<img src="github_images/ai_ss.png" width="300"/>
+## Nutrient Facts
 <img src="github_images/nutrifacts_ss.png" width="300"/>
-<img src="github_images/prof_ss.png" width="300"/>
-<img src="github_images/quests_ss.png" width="300"/>
+## Ingredients
+<img src="github_images/ingre_ss.png" width="300"/>
+### Dietary Preference View
+## Diet Selection
+<img src="github_images/diet_ss.png" width="300"/>
+## Restrictions
 <img src="github_images/restr_ss.png" width="300"/>
+## Limitations
+<img src="github_images/nutri_ss.png" width="300"/>
+### Profile View
+## Stats & Badges
+<img src="github_images/prof_ss.png" width="300"/>
+## Weekly Challenges
+<img src="github_images/quests_ss.png" width="300"/>
+
+
+
+
+
+
+
+
+
