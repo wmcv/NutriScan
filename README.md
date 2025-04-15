@@ -17,45 +17,65 @@
 - Cron jobs to automatically refresh weekly challenges
 - Dotenv for secure management of API keys and environment variables
 
-## Navbar stuff
-<div align="center">
-  <img src="github_images/cam_ss.png" width="300" alt="Navbar & Scanner"/>
-</div>
-
-## Navbar stuff
-<div align="center">
-  <img src="github_images/cam_ss.png" width="300" alt="Navbar & Scanner"/>
-</div>
-## Navbar stuff
-<div align="center">
-  <img src="github_images/cam_ss.png" width="300" alt="Navbar & Scanner"/>
-</div>
-
 
 
 
 # Dashboard View
 ### Navbar & Scanner
+
+<div align="center">
 <img src="github_images/cam_ss.png" width="300"/>
+</div>
+
 ### AI Rating
+
+<div align="center">
 <img src="github_images/ai_ss.png" width="300"/>
+</div>
+
 ### Nutrient Facts
+
+<div align="center">
 <img src="github_images/nutrifacts_ss.png" width="300"/>
+</div>
+
 ### Ingredients
+
+<div align="center">
 <img src="github_images/ingre_ss.png" width="300"/>
+</div>
+  
 # Dietary Preference View
 ### Diet Selection
+
+<div align="center">
 <img src="github_images/diet_ss.png" width="300"/>
+</div>
+
 ### Restrictions
+
+<div align="center">
 <img src="github_images/restr_ss.png" width="300"/>
+</div>
+
 ### Limitations
+
+<div align="center">
 <img src="github_images/nutri_ss.png" width="300"/>
+</div>
+
 ### Profile View
 ### Stats & Badges
-<img src="github_images/prof_ss.png" width="300"/>
-## Weekly Challenges
-<img src="github_images/quests_ss.png" width="300"/>
 
+<div align="center">
+<img src="github_images/prof_ss.png" width="300"/>
+</div>
+
+## Weekly Challenges
+
+<div align="center">
+<img src="github_images/quests_ss.png" width="300"/>
+</div>
 
 
 
