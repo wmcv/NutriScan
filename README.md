@@ -1,5 +1,7 @@
-# [Visit NutriScan Web-App](https://nutriscan-webapp.vercel.app/)
-### (Meant for phones)
+# [**Visit NutriScan Web-App**](https://nutriscan-webapp.vercel.app/)
+
+<p style="font-size: 12px;">(Meant for phones)</p>
+
 # NutriScan is a smart food scanner app that lets users scan barcodes on food products and receive AI-powered feedback
 
 
