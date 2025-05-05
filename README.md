@@ -1,5 +1,4 @@
 # [**Visit NutriScan Web-App**](https://nutriscan-webapp.vercel.app/)
-
 <p style="font-size: 12px; margin-top: -10px;">(Meant for phones)</p>
 
 
